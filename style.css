@@ -91,3 +91,12 @@ body{
     width: 100%;
     object-fit: cover;
 }
+.unselectedAnswer{
+    opacity: 0.3;
+}
+.correct{
+    color: #009C22;
+}
+.wrong{
+    color: #FF0B0B;
+}
