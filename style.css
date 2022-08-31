@@ -1,3 +1,90 @@
 *{
     font-family: 'Roboto', sans-serif;
 }
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    z-index: 5;
+    height: 69px;
+
+    font-size: 37px;
+    font-weight: 700;
+    color: #ffffff;
+
+    background-color: #EC362D;
+    box-shadow: 0 5px 5px rgba(48, 48, 48, 0.466);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+main{
+    padding-top:69px;
+    background-color: #f7f7f7;
+}
+.quiz-header{
+    height: 142px;
+
+    background-image: url("img/Hogwarts.webp");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.596);
+    background-blend-mode: multiply;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+.quiz-title{
+    margin: auto;
+    
+    color: white;
+    font-weight: 400;
+    text-align: center;
+    font-size: 19px;
+}
+.question{
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #ffffff;
+    box-shadow: 0 0 2px rgba(48, 48, 48, 0.521);
+}
+.question-title{
+    padding: 20px;
+
+    background-color: #434CA0;
+    color: #ffffff;
+
+    font-weight: 700;
+    font-size: 19px;
+    text-align: center;
+    line-height: 22.27px;
+}
+.options-holder{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.option{
+    width: 48%;
+    aspect-ratio: 1.44;
+    margin-top: 15px;
+}   
+.option-image{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
