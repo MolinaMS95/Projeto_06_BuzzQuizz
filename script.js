@@ -2,6 +2,7 @@ const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/10047";
 let quizzes;
 let questions = [];
 let hits = 0;
+let clicks = 0;
 
 //Atualmente pega apenas um quiz, o que está na URL
 //Mas será modificado pra pegar todos os quizzes no futuro
@@ -13,6 +14,7 @@ function getQuizzes(){
 
 function getQuizzSuccess(data){
     quizzes = data.data;
+    console.log(quizzes);
     displayQuizz(quizzes);
 }
 
@@ -80,6 +82,7 @@ function shuffle(originalArray) {
 window.onload = getQuizzes;
 
 function selectAnswer(answer){
+    clicks++;
     let question = answer.parentNode;
     let questionNumber = question.parentNode.id;
     let answerText = question.querySelectorAll('.answer-text');
@@ -95,19 +98,44 @@ function selectAnswer(answer){
             answerText[i].classList.add('wrong');
         }
     }
+
     let isCorrectAnswer = answer.querySelector('.answer-text');
     if(isCorrectAnswer.classList.contains('correct')){
         hits++;
     }
-    console.log(hits);
+
     let nextQuestionNumber = Number(questionNumber) + 1;
     let nextQuestion = document.getElementById(`${nextQuestionNumber}`);
     if(nextQuestion !== null){
         setTimeout(scrollNext, 2000, nextQuestion);
     }
-
+    let questionsAmount = document.querySelectorAll('.question').length;
+    if (clicks === questionsAmount){
+        finishQuizz();
+    }
 }
 
 function scrollNext(element){
     element.scrollIntoView();
+}
+
+function finishQuizz(){
+    const hitPercent = Math.round((hits/clicks)*100);
+    const resultBox = document.querySelector('.results');
+    resultBox.classList.remove('hidden');
+    for(let i = quizzes.levels.length; i > 0; i--){
+        if(hitPercent >= quizzes.levels[i-1].minValue){
+            resultBox.innerHTML =
+            `<div class="level">
+              <p>${hitPercent}% de acerto: ${quizzes.levels[i-1].title}</p>
+            </div>
+            <div class="levelImg">
+              <img src="${quizzes.levels[i-1].image}" alt="level illustration"/>
+            </div>
+            <div class="levelText">
+              <p>${quizzes.levels[i-1].text}</p>
+            </div>`
+        }
+    }
+    setTimeout(scrollNext, 2000, resultBox);
 }
