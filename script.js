@@ -1,4 +1,4 @@
-const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/10047";
+const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/";
 let quizzes;
 let questions = [];
 let hits = 0;
@@ -13,13 +13,39 @@ function getQuizzes(){
 
 function getQuizzSuccess(data){
     quizzes = data.data;
-    displayQuizz(quizzes);
+    /*displayQuiz(quizzes[0]); */
+    listQuizzes();
 }
-
-//Mostra um quizz apenas
-function displayQuizz(quizData){
+function listQuizzes(){
+    const holder = document.querySelector(".quiz-display-list");
+    holder.innerHTML='';
+    for(let i = 0; i<quizzes.length;i++){
+        holder.innerHTML+=`
+            <li
+                onclick="getSingleQuiz(this)"
+                class="quiz-display" 
+                style="background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.904) 100%), url('${quizzes[i].image}')" 
+                id="${quizzes[i].id}"
+            >
+                <p class="quiz-display-title">${quizzes[i].title}</p>
+            </li>
+        `
+    }
+}
+function getSingleQuiz(element){
+    const url = apiURL+element.id;
+    const request = axios.get(url);
+    request.then(singleQuizRequestSuccess)
+}
+function singleQuizRequestSuccess(data){
+    displayQuiz(data.data);
+}
+//Mostra um quiz apenas
+function displayQuiz(quizData){
+    document.querySelector(".quiz-list-holder").classList.add("hidden");
     const quizDiv = document.querySelector(".quiz");
     const questionHolder = quizDiv.querySelector(".question-holder");
+    quizDiv.classList.remove("hidden");
     questionHolder.innerHTML = '';
     quizDiv.querySelector(".quiz-header").style.backgroundImage = `url("${quizData.image}")`;
     quizDiv.querySelector(".quiz-title").innerHTML = quizData.title;
