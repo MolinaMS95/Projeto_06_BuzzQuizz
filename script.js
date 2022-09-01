@@ -1,5 +1,6 @@
 const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/";
 let quizzes;
+let currentQuiz;
 let questions = [];
 let hits = 0;
 let clicks = 0;
@@ -45,6 +46,8 @@ function singleQuizRequestSuccess(data){
 }
 //Mostra um quiz apenas
 function displayQuiz(quizData){
+    currentQuiz = quizData;
+    console.log(quizData);
     document.querySelector(".quiz-list-holder").classList.add("hidden");
     const quizDiv = document.querySelector(".quiz");
     const questionHolder = quizDiv.querySelector(".question-holder");
@@ -55,6 +58,8 @@ function displayQuiz(quizData){
     for(let i = 0; i<quizData.questions.length;i++){
         displayQuestion(quizData.questions[i], questionHolder, i);
     }
+    const header = document.querySelector('.quiz-header');
+    header.scrollIntoView();
 }
 
 function displayQuestion(data, holder, id){
@@ -155,17 +160,17 @@ function finishQuizz(){
     const hitPercent = Math.round((hits/clicks)*100);
     buttonsBox.classList.remove('hidden');
     resultBox.classList.remove('hidden');
-    for(let i = quizzes.levels.length; i > 0; i--){
-        if(hitPercent >= quizzes.levels[i-1].minValue){
+    for(let i = currentQuiz.levels.length; i > 0; i--){
+        if(hitPercent >= currentQuiz.levels[i-1].minValue){
             resultBox.innerHTML =
             `<div class="level">
-              <p>${hitPercent}% de acerto: ${quizzes.levels[i-1].title}</p>
+              <p>${hitPercent}% de acerto: ${currentQuiz.levels[i-1].title}</p>
             </div>
             <div class="levelImg">
-              <img src="${quizzes.levels[i-1].image}" alt="level illustration"/>
+              <img src="${currentQuiz.levels[i-1].image}" alt="level illustration"/>
             </div>
             <div class="levelText">
-              <p>${quizzes.levels[i-1].text}</p>
+              <p>${currentQuiz.levels[i-1].text}</p>
             </div>`
         }
     }
