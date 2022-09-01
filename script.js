@@ -160,18 +160,22 @@ function finishQuizz(){
     const hitPercent = Math.round((hits/clicks)*100);
     buttonsBox.classList.remove('hidden');
     resultBox.classList.remove('hidden');
-    for(let i = currentQuiz.levels.length; i > 0; i--){
-        if(hitPercent >= currentQuiz.levels[i-1].minValue){
+    let sortedLevels = currentQuiz.levels;
+    sortedLevels.sort(function(a, b){return b - a});
+    console.log(sortedLevels)
+    for(let i = sortedLevels.length; i > 0; i--){
+        if(hitPercent >= sortedLevels[i-1].minValue){
             resultBox.innerHTML =
             `<div class="level">
-              <p>${hitPercent}% de acerto: ${currentQuiz.levels[i-1].title}</p>
+              <p>${hitPercent}% de acerto: ${sortedLevels[i-1].title}</p>
             </div>
             <div class="levelImg">
-              <img src="${currentQuiz.levels[i-1].image}" alt="level illustration"/>
+              <img src="${sortedLevels[i-1].image}" alt="level illustration"/>
             </div>
             <div class="levelText">
-              <p>${currentQuiz.levels[i-1].text}</p>
-            </div>`
+              <p>${sortedLevels[i-1].text}</p>
+            </div>`;
+            break;
         }
     }
     setTimeout(scrollNext, 2000, resultBox);
