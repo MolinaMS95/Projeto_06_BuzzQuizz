@@ -105,7 +105,7 @@ function selectAnswer(answer){
         let answerText = question.querySelectorAll('.answer-text');
         for (let i = 0; i < question.children.length; i++){
             if(question.children[i]!==answer){
-                question.children[i].classList.add('unselectedAnswer');
+                question.children[i].classList.add('unselected-answer');
             }
             if(questions[questionNumber][i] === true){
                 answerText[i].classList.add('correct');
@@ -152,10 +152,10 @@ function finishQuizz(){
             `<div class="level">
               <p>${hitPercent}% de acerto: ${sortedLevels[i-1].title}</p>
             </div>
-            <div class="levelImg">
+            <div class="level-img">
               <img src="${sortedLevels[i-1].image}" alt="level illustration"/>
             </div>
-            <div class="levelText">
+            <div class="level-text">
               <p>${sortedLevels[i-1].text}</p>
             </div>`;
             break;
@@ -171,7 +171,7 @@ function restart(){
     hits = 0;
     const answers = document.querySelectorAll('.answer');
     for (let i = 0; i < answers.length; i++){
-        answers[i].classList.remove('unselectedAnswer');
+        answers[i].classList.remove('unselected-answer');
         answers[i].parentNode.classList.remove('answered');
         answers[i].lastElementChild.classList.remove('correct');
         answers[i].lastElementChild.classList.remove('wrong');

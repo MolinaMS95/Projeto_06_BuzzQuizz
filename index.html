@@ -18,6 +18,7 @@
     <header>
         <h1>BuzzQuizz</h1>
     </header>
+
     <main>
         <div class="create-quiz">
           <p>Você não criou nenhum quiz ainda :(</p>
@@ -46,6 +47,88 @@
 
     </main>
 
+    <div class="quizz-creation hidden">
+      <div class="basic-info">
+        <div class="top-text">
+          <p>Comece pelo começo</p>
+        </div>
+        <div class="input-area">
+          <input class="create-title" placeholder="Título do seu quizz"/>
+          <input type="url" class="img-URL" placeholder="URL da imagem do seu quizz"/>
+          <input type="number" class="questions-amount" placeholder="Quantidade de perguntas do quizz"/>
+          <input type="number" class="levels-amount" placeholder="Quantidade de níveis do quizz"/>
+        </div>
+        <div class="button-area">
+          <button class="next-step">Prosseguir pra criar perguntas</button>
+        </div>
+      </div>
+      <div class="quizz-questions hidden">
+        <div class="top-text">
+          <p>Crie suas perguntas</p>
+        </div>
+        <div class="create-question n1">
+          <p>Pergunta 1</p>
+          <ion-icon name="create-outline"></ion-icon>
+          <div class="question-info">
+            <input class="create-text" placeholder="Texto da pergunta"/>
+            <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
+          </div>
+          <p>Resposta correta</p>
+          <div class="correct-answer">
+            <input class="create-answer" placeholder="Reposta correta"/>
+            <input type="url" class="create-answer-URL" placeholder="URL da imagem"/>
+          </div>
+          <div class="wrong-answers">
+            <p>Respostas incorretas</p>
+            <div class="option1">
+              <input class="create-wrong-answer1" placeholder="Reposta incorreta 1"/>
+              <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 1"/>
+            </div>
+
+            <div class="option2">
+              <input class="create-wrong-answer2" placeholder="Reposta incorreta 2"/>
+              <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 2"/>
+            </div>
+
+            <div class="option3">
+              <input class="create-wrong-answer3" placeholder="Reposta incorreta 3"/>
+              <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 3"/>
+            </div>
+          </div>
+        </div>
+        <div class="button-area">
+          <button class="next-step">Prosseguir pra criar níveis</button>
+        </div>
+      </div>
+      <div class="quizz-levels hidden">
+        <div class="top-text">
+          <p>Agora, decida os níveis!</p>
+        </div>
+        <div class="create-level n1">
+          <p>Nível 1</p>
+          <ion-icon name="create-outline"></ion-icon>
+          <div class="level-info">
+            <input class="create-level-title" placeholder="Título do nível"/>
+            <input type="number" class="create-treshold" placeholder="% de acerto mínima"/>
+            <input type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
+            <textarea class="create-level-description" placeholder="Descrição do nível"></textarea>
+          </div>
+        </div>
+        <div class="button-area">
+          <button class="next-step">Prosseguir pra criar níveis</button>
+        </div>
+      </div>
+      <div class="quizz-created hidden">
+        <div class="top-text">
+          <p>Seu quizz está pronto!</p>
+        </div>
+        <div class="new-quizz"></div>
+        <div class="buttons">
+          <button>Acessar Quizz</button>
+          <p>Voltar pra home</p>
+        </div>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
