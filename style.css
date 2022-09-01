@@ -137,3 +137,29 @@ body{
 
     color: #484848;
 }
+.buttons{
+    width: 100%;
+    height: 196px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+button{
+    width: 220px;
+    height: 44px;
+
+    margin-top: 15px;
+    margin-bottom: 20px;
+
+    background: #EC362D;
+    border: none;
+    border-radius: 15px;
+
+    font-size: 18px;
+    color: #FFF5F4;
+}
+.buttons p{
+    font-size: 18px;
+    color: #818181;
+}
