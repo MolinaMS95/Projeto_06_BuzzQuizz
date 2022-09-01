@@ -20,6 +20,16 @@
     </header>
 
     <main>
+      
+        <div class="quiz-list-holder">
+          <p class="quiz-list-title" >Todos os quizzes</p>
+          <ul class="quiz-display-list">
+            <li class="quiz-display">
+              <p class="quiz-display-title">Você sabe quantos dedos tem na mão do Lula?</p>
+            </li>
+          </ul>
+        </div>
+        
         <div class="quiz hidden">
           <div class="quiz-header">
             <h2 class="quiz-title"></h2>
@@ -28,9 +38,10 @@
           <div class="results hidden"></div>
           <div class="buttons hidden">
             <button onclick="restart()">Reiniciar Quizz</button>
-            <p>Voltar pra home</p>
+            <p onclick="goHome()">Voltar pra home</p>
           </div>  
         </div>
+
     </main>
 
     <div class="quizz-creation">
