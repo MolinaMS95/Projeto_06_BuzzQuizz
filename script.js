@@ -2,6 +2,9 @@ const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/";
 let quizzes;
 let questions = [];
 let hits = 0;
+let clicks = 0;
+const resultBox = document.querySelector('.results');
+const buttonsBox = document.querySelector('.buttons');
 
 //Atualmente pega apenas um quiz, o que está na URL
 //Mas será modificado pra pegar todos os quizzes no futuro
@@ -107,33 +110,80 @@ window.onload = getQuizzes;
 
 function selectAnswer(answer){
     let question = answer.parentNode;
-    let questionNumber = question.parentNode.id;
-    let answerText = question.querySelectorAll('.answer-text');
-    for (let i = 0; i < question.children.length; i++){
-        if(question.children[i]!==answer){
-            question.children[i].classList.add('unselectedAnswer');
-            question.children[i].onclick = null;
+    let clickDisabled = question.classList.contains('answered');
+    if(!clickDisabled){
+        clicks++;
+        let questionNumber = question.parentNode.id;
+        let answerText = question.querySelectorAll('.answer-text');
+        for (let i = 0; i < question.children.length; i++){
+            if(question.children[i]!==answer){
+                question.children[i].classList.add('unselectedAnswer');
+            }
+            if(questions[questionNumber][i] === true){
+                answerText[i].classList.add('correct');
+            }
+            else {
+                answerText[i].classList.add('wrong');
+            }
         }
-        if(questions[questionNumber][i] === true){
-            answerText[i].classList.add('correct');
-        }
-        else {
-            answerText[i].classList.add('wrong');
-        }
-    }
-    let isCorrectAnswer = answer.querySelector('.answer-text');
-    if(isCorrectAnswer.classList.contains('correct')){
-        hits++;
-    }
-    console.log(hits);
-    let nextQuestionNumber = Number(questionNumber) + 1;
-    let nextQuestion = document.getElementById(`${nextQuestionNumber}`);
-    if(nextQuestion !== null){
-        setTimeout(scrollNext, 2000, nextQuestion);
-    }
 
+        let isCorrectAnswer = answer.querySelector('.answer-text');
+        if(isCorrectAnswer.classList.contains('correct')){
+            hits++;
+        }
+
+        let nextQuestionNumber = Number(questionNumber) + 1;
+        let nextQuestion = document.getElementById(`${nextQuestionNumber}`);
+        if(nextQuestion !== null){
+            setTimeout(scrollNext, 2000, nextQuestion);
+        }
+        let questionsAmount = document.querySelectorAll('.question').length;
+        if (clicks === questionsAmount){
+            finishQuizz();
+        }
+        question.classList.add('answered');
+    }
+    console.log(clicks);
+    console.log(hits);
 }
 
 function scrollNext(element){
     element.scrollIntoView();
+}
+
+function finishQuizz(){
+    const hitPercent = Math.round((hits/clicks)*100);
+    buttonsBox.classList.remove('hidden');
+    resultBox.classList.remove('hidden');
+    for(let i = quizzes.levels.length; i > 0; i--){
+        if(hitPercent >= quizzes.levels[i-1].minValue){
+            resultBox.innerHTML =
+            `<div class="level">
+              <p>${hitPercent}% de acerto: ${quizzes.levels[i-1].title}</p>
+            </div>
+            <div class="levelImg">
+              <img src="${quizzes.levels[i-1].image}" alt="level illustration"/>
+            </div>
+            <div class="levelText">
+              <p>${quizzes.levels[i-1].text}</p>
+            </div>`
+        }
+    }
+    setTimeout(scrollNext, 2000, resultBox);
+}
+
+function restart(){
+    buttonsBox.classList.add('hidden');
+    resultBox.classList.add('hidden');
+    clicks = 0;
+    hits = 0;
+    const answers = document.querySelectorAll('.answer');
+    for (let i = 0; i < answers.length; i++){
+        answers[i].classList.remove('unselectedAnswer');
+        answers[i].parentNode.classList.remove('answered');
+        answers[i].lastElementChild.classList.remove('correct');
+        answers[i].lastElementChild.classList.remove('wrong');
+    }
+    const header = document.querySelector('.quiz-header');
+    header.scrollIntoView();
 }
