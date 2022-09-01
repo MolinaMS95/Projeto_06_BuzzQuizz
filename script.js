@@ -84,7 +84,7 @@ function displayQuestion(data, holder, id){
 function displayAnswers(data, id){
     const holder = document.querySelectorAll(".question")[id];
     const answerHolder = holder.querySelector(".answer-holder");
-    let answers = shuffle(data);
+    let answers = data.sort(() => Math.random() - 0.5);
     let feedback = [];
     for(let i = 0; i<answers.length;i++){
         answerHolder.innerHTML += `
@@ -96,23 +96,6 @@ function displayAnswers(data, id){
         feedback.push(answers[i].isCorrectAnswer);
     }
     questions.push(feedback);
-}
-
-//Peguei do StackOverflow
-function shuffle(originalArray) {
-    //Slice 0 serve pra tirar uma cópia do array e não alterar o array original
-    let array = originalArray.slice(0);
-    let currentIndex = array.length,  randomIndex;
-    // While there remain elements to shuffle.
-    while (currentIndex != 0) {
-      // Pick a remaining element.
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
-    }
-    return array;
 }
 
 function selectAnswer(answer){
@@ -205,3 +188,5 @@ function goHome(){
     quizDiv.classList.add("hidden");
     getQuizzes();
 }
+
+window.onload = getQuizzes;
