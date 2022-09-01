@@ -13,9 +13,7 @@ const quizDiv = document.querySelector(".quiz");
 const questionHolder = quizDiv.querySelector(".question-holder");
 const quizHeader = document.querySelector('.quiz-header');
 
-//Atualmente pega apenas um quiz, o que está na URL
-//Mas será modificado pra pegar todos os quizzes no futuro
-//Depois faremos outra função para pegar quiz individual.
+
 function getQuizzes(){
     const request = axios.get(apiURL);
     request.then(getQuizzSuccess);
