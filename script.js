@@ -4,8 +4,14 @@ let currentQuiz;
 let questions = [];
 let hits = 0;
 let clicks = 0;
+
 const resultBox = document.querySelector('.results');
 const buttonsBox = document.querySelector('.buttons');
+const quizDisplayList = document.querySelector(".quiz-display-list");
+const quizListHolder = document.querySelector(".quiz-list-holder");
+const quizDiv = document.querySelector(".quiz");
+const questionHolder = quizDiv.querySelector(".question-holder");
+const quizHeader = document.querySelector('.quiz-header');
 
 //Atualmente pega apenas um quiz, o que está na URL
 //Mas será modificado pra pegar todos os quizzes no futuro
@@ -17,14 +23,12 @@ function getQuizzes(){
 
 function getQuizzSuccess(data){
     quizzes = data.data;
-    /*displayQuiz(quizzes[0]); */
     listQuizzes();
 }
 function listQuizzes(){
-    const holder = document.querySelector(".quiz-display-list");
-    holder.innerHTML='';
+    quizDisplayList.innerHTML='';
     for(let i = 0; i<quizzes.length;i++){
-        holder.innerHTML+=`
+        quizDisplayList.innerHTML+=`
             <li
                 onclick="getSingleQuiz(this)"
                 class="quiz-display" 
@@ -36,30 +40,30 @@ function listQuizzes(){
         `
     }
 }
+
 function getSingleQuiz(element){
     const url = apiURL+element.id;
     const request = axios.get(url);
     request.then(singleQuizRequestSuccess)
 }
+
 function singleQuizRequestSuccess(data){
     displayQuiz(data.data);
 }
+
 //Mostra um quiz apenas
 function displayQuiz(quizData){
     currentQuiz = quizData;
     console.log(quizData);
-    document.querySelector(".quiz-list-holder").classList.add("hidden");
-    const quizDiv = document.querySelector(".quiz");
-    const questionHolder = quizDiv.querySelector(".question-holder");
+    quizListHolder.classList.add("hidden");
     quizDiv.classList.remove("hidden");
     questionHolder.innerHTML = '';
-    quizDiv.querySelector(".quiz-header").style.backgroundImage = `url("${quizData.image}")`;
-    quizDiv.querySelector(".quiz-title").innerHTML = quizData.title;
+    quizHeader.style.backgroundImage = `url("${quizData.image}")`;
+    quizHeader.querySelector(".quiz-title").innerHTML = quizData.title;
     for(let i = 0; i<quizData.questions.length;i++){
         displayQuestion(quizData.questions[i], questionHolder, i);
     }
-    const header = document.querySelector('.quiz-header');
-    header.scrollIntoView();
+    quizHeader.scrollIntoView();
 }
 
 function displayQuestion(data, holder, id){
@@ -109,9 +113,7 @@ function shuffle(originalArray) {
         array[randomIndex], array[currentIndex]];
     }
     return array;
-  }
-
-window.onload = getQuizzes;
+}
 
 function selectAnswer(answer){
     let question = answer.parentNode;
@@ -193,6 +195,13 @@ function restart(){
         answers[i].lastElementChild.classList.remove('correct');
         answers[i].lastElementChild.classList.remove('wrong');
     }
-    const header = document.querySelector('.quiz-header');
-    header.scrollIntoView();
+    quizHeader.scrollIntoView();
+}
+
+function goHome(){
+    buttonsBox.classList.add('hidden');
+    resultBox.classList.add('hidden');
+    quizListHolder.classList.remove("hidden");
+    quizDiv.classList.add("hidden");
+    getQuizzes();
 }
