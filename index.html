@@ -20,11 +20,11 @@
     </header>
 
     <main>
-        <div class="create-quiz">
+        <div class="create-quiz hidden">
           <p>Você não criou nenhum quiz ainda :(</p>
           <p class="create-quiz-button">Criar Quiz</p>
         </div>
-        <div class="quiz-list-holder">
+        <div class="quiz-list-holder hidden">
           <p class="quiz-list-title" >Todos os Quizzes</p>
           <ul class="quiz-display-list">
             <li class="quiz-display">
@@ -47,7 +47,7 @@
 
     </main>
 
-    <div class="quizz-creation hidden">
+    <div class="quizz-creation">
       <div class="basic-info">
         <div class="top-text">
           <p>Comece pelo começo</p>
@@ -59,7 +59,7 @@
           <input type="number" class="levels-amount" placeholder="Quantidade de níveis do quizz"/>
         </div>
         <div class="button-area">
-          <button class="next-step">Prosseguir pra criar perguntas</button>
+          <button onclick="infoValidation()" class="next-step">Prosseguir pra criar perguntas</button>
         </div>
       </div>
       <div class="quizz-questions hidden">
@@ -68,36 +68,38 @@
         </div>
         <div class="create-question n1">
           <p>Pergunta 1</p>
-          <ion-icon name="create-outline"></ion-icon>
-          <div class="question-info">
-            <input class="create-text" placeholder="Texto da pergunta"/>
-            <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
-          </div>
-          <p>Resposta correta</p>
-          <div class="correct-answer">
-            <input class="create-answer" placeholder="Reposta correta"/>
-            <input type="url" class="create-answer-URL" placeholder="URL da imagem"/>
-          </div>
-          <div class="wrong-answers">
-            <p>Respostas incorretas</p>
-            <div class="option1">
-              <input class="create-wrong-answer1" placeholder="Reposta incorreta 1"/>
-              <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 1"/>
+          <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
+          <div class="container">
+            <div class="question-info">
+              <input class="create-text" placeholder="Texto da pergunta"/>
+              <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
             </div>
-
-            <div class="option2">
-              <input class="create-wrong-answer2" placeholder="Reposta incorreta 2"/>
-              <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 2"/>
+            <p>Resposta correta</p>
+            <div class="correct-answer">
+              <input class="create-answer" placeholder="Reposta correta"/>
+              <input type="url" class="create-answer-URL" placeholder="URL da imagem"/>
             </div>
-
-            <div class="option3">
-              <input class="create-wrong-answer3" placeholder="Reposta incorreta 3"/>
-              <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 3"/>
+            <div class="wrong-answers">
+              <p>Respostas incorretas</p>
+              <div class="option1">
+                <input class="create-wrong-answer1" placeholder="Reposta incorreta 1"/>
+                <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 1"/>
+              </div>
+  
+              <div class="option2">
+                <input class="create-wrong-answer2" placeholder="Reposta incorreta 2"/>
+                <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 2"/>
+              </div>
+  
+              <div class="option3">
+                <input class="create-wrong-answer3" placeholder="Reposta incorreta 3"/>
+                <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 3"/>
+              </div>
             </div>
           </div>
         </div>
         <div class="button-area">
-          <button class="next-step">Prosseguir pra criar níveis</button>
+          <button class="next-step" onclick="questionValidation()">Prosseguir pra criar níveis</button>
         </div>
       </div>
       <div class="quizz-levels hidden">
@@ -106,7 +108,7 @@
         </div>
         <div class="create-level n1">
           <p>Nível 1</p>
-          <ion-icon name="create-outline"></ion-icon>
+          <ion-ic<ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
           <div class="level-info">
             <input class="create-level-title" placeholder="Título do nível"/>
             <input type="number" class="create-treshold" placeholder="% de acerto mínima"/>

@@ -302,9 +302,10 @@ input::placeholder, textarea::placeholder{
     margin-top: 29px;
 }
 .create-question, .create-level{
-    padding: 27px 18px 0px 16px;
+    padding: 27px 18px 20px 16px;
+    margin-bottom: 20px;
 
-    background: #FFFFFF;
+    background-color: #FFFFFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 
     position: relative;
@@ -319,6 +320,9 @@ input::placeholder, textarea::placeholder{
 }
 .create-question div, .create-level div{
     padding: 14px 0px;
+}
+.create-question div:last-child{
+    padding-bottom: 0px;
 }
 textarea{
     height: 177px;

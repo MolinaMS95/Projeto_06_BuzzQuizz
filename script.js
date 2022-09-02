@@ -4,6 +4,8 @@ let currentQuiz;
 let questions = [];
 let hits = 0;
 let clicks = 0;
+let levels;
+const userQuizz ={title: undefined, image: undefined, questions: undefined, levels: undefined};
 
 const resultBox = document.querySelector('.results');
 const buttonsBox = document.querySelector('.buttons');
@@ -187,4 +189,130 @@ function goHome(){
     getQuizzes();
 }
 
+function expand(item){
+    const question = item.parentNode;
+    question.querySelector('.container').classList.toggle('hidden');
+}
+
+function infoValidation(){
+    const title = document.querySelector(".create-title").value;
+    const titleVerification = 19 < title.length && title.length < 66;
+    if(!titleVerification){
+        alert("Título deve ter entre 20 e 65 caracteres");
+    }
+    const url = document.querySelector(".img-URL").value;
+    const urlVerification = url.includes("https://");
+    if(!urlVerification){
+        alert("Sua URL de imagem deve ter um formato válido");
+    }
+    const questions = document.querySelector(".questions-amount").value;
+    const questionsVerification = 2 < questions;
+    if(!questionsVerification){
+        alert("Deve ter pelo menos 3 perguntas");
+    }
+    levels = document.querySelector(".levels-amount").value;
+    const levelsVerification = 1 < levels;
+    if(!levelsVerification){
+        alert("Deve ter pelo menos 2 níveis");
+    }
+    if(titleVerification && urlVerification && questionsVerification && levelsVerification){
+        userQuizz.title = title;
+        userQuizz.image = url;
+        createQuestions(questions);
+    }
+}
+
+function createQuestions(questions){
+    let questionsNumber = questions;
+    document.querySelector('.basic-info').classList.add('hidden');
+    const questionCreator = document.querySelector('.quizz-questions');
+    questionCreator.classList.remove('hidden');
+    questionCreator.innerHTML = 
+    `<div class="top-text">
+        <p>Crie suas perguntas</p>
+    </div>`;
+    for(let i = 0; i < questionsNumber; i++){
+        if((i+1)==questionsNumber){
+            questionCreator.innerHTML +=
+            `<div class="create-question n${i+1}">
+                <p>Pergunta ${i+1}</p>
+                <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
+                <div class="container">
+                    <div class="question-info">
+                        <input class="create-text" placeholder="Texto da pergunta"/>
+                        <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
+                    </div>
+                    <p>Resposta correta</p>
+                    <div class="correct-answer">
+                        <input class="create-answer" placeholder="Reposta correta"/>
+                        <input type="url" class="create-answer-URL" placeholder="URL da imagem"/>
+                    </div>
+                    <div class="wrong-answers">
+                        <p>Respostas incorretas</p>
+                        <div class="option1">
+                            <input class="create-wrong-answer1" placeholder="Reposta incorreta 1"/>
+                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 1"/>
+                        </div>
+
+                        <div class="option2">
+                            <input class="create-wrong-answer2" placeholder="Reposta incorreta 2"/>
+                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 2"/>
+                        </div>
+
+                        <div class="option3">
+                            <input class="create-wrong-answer3" placeholder="Reposta incorreta 3"/>
+                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 3"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-area">
+                <button class="next-step" onclick="questionValidation()">Prosseguir pra criar níveis</button>
+            </div>`
+        }
+        else{
+            questionCreator.innerHTML +=
+            `<div class="create-question n${i+1}">
+                <p>Pergunta ${i+1}</p>
+                <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
+                <div class="container">
+                    <div class="question-info">
+                        <input class="create-text" placeholder="Texto da pergunta"/>
+                        <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
+                    </div>
+                    <p>Resposta correta</p>
+                    <div class="correct-answer">
+                        <input class="create-answer" placeholder="Reposta correta"/>
+                        <input type="url" class="create-answer-URL" placeholder="URL da imagem"/>
+                    </div>
+                    <div class="wrong-answers">
+                        <p>Respostas incorretas</p>
+                        <div class="option1">
+                            <input class="create-wrong-answer1" placeholder="Reposta incorreta 1"/>
+                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 1"/>
+                        </div>
+    
+                        <div class="option2">
+                            <input class="create-wrong-answer2" placeholder="Reposta incorreta 2"/>
+                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 2"/>
+                        </div>
+    
+                        <div class="option3">
+                            <input class="create-wrong-answer3" placeholder="Reposta incorreta 3"/>
+                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 3"/>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        }
+    }
+}
+
+/*function questionValidation(){
+    const questionsTexts = document.querySelectorAll(".create-text");
+    for (let i = 0; i < questionsTexts.length; i++){
+        let textSizes = questionsTexts[i].value;
+        if(!(textSizes.length < 20))
+    }
+}*/
 window.onload = getQuizzes;
