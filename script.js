@@ -6,6 +6,7 @@ let hits = 0;
 let clicks = 0;
 let levels = 3;
 let userQuizz = {title: undefined, image: undefined, questions: undefined, levels:undefined};
+let personalQuizzes = [];
 
 const resultBox = document.querySelector('.results');
 const buttonsBox = document.querySelector('.buttons');
@@ -219,7 +220,7 @@ function infoValidation(){
         alert("Título deve ter entre 20 e 65 caracteres");
     }
     const url = document.querySelector(".img-URL").value;
-    const urlVerification = url.includes("https://");
+    const urlVerification = isValidUrl(url);
     if(!urlVerification){
         alert("Sua URL de imagem deve ter um formato válido");
     }
@@ -329,7 +330,8 @@ function collapseToggle(element){
     element.parentElement.querySelector(".level-info").toggle("hidden");
 }
 function createLevels(){
-    document.querySelector(".quizz-levels").remove("hidden");
+    document.querySelector('.quizz-questions').classList.add('hidden');
+    document.querySelector(".quizz-levels").classList.remove("hidden");
     const levelHolder = document.querySelector(".level-holder");
     for(let i = 0;i<levels;i++){
         if(i===0){
@@ -395,6 +397,7 @@ function levelValidation(){
         console.log(userQuizz.levels);
         document.querySelector(".quizz-levels").classList.add("hidden");
         document.querySelector(".quizz-created").classList.remove("hidden");
+        saveQuizz();
     }
 }
 
@@ -427,7 +430,7 @@ function answersValidation(){
             let answerText = allAnswers[n].value;
             let answerTextVerification = (answerText != "");
             let answerImg = allImgs[n].value;
-            let answerImgVerification = answerImg.includes("https://");
+            let answerImgVerification = isValidUrl(answerImg);
             if(answerTextVerification && (!answerImgVerification)){
                 alert('Sua URL de imagem deve ter um formato válido');
                 return;
@@ -448,5 +451,20 @@ function answersValidation(){
         }
         containRightAnswer = false;
     }
+    createLevels();
+}
+
+function saveQuizz(){
+    const promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', userQuizz);
+    promise.then(quizzSavedSuccesfully);
+    promise.catch(errorSaving);
+}
+
+function quizzSavedSuccesfully(data){
+    const quizz = data.data;
+    const quizzID = quizz.id;
+    personalQuizzes.push(quizzID);
+    const serializedQuizzes = JSON.stringify(personalQuizzes);
+    localStorage.setItem("myQuizzes", serializedQuizzes);
 }
 window.onload = getQuizzes;
