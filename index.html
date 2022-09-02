@@ -102,22 +102,15 @@
           <button class="next-step" onclick="questionValidation()">Prosseguir pra criar níveis</button>
         </div>
       </div>
-      <div class="quizz-levels hidden">
+      <div class="quizz-levels">
         <div class="top-text">
           <p>Agora, decida os níveis!</p>
         </div>
-        <div class="create-level n1">
-          <p>Nível 1</p>
-          <ion-ic<ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
-          <div class="level-info">
-            <input class="create-level-title" placeholder="Título do nível"/>
-            <input type="number" class="create-treshold" placeholder="% de acerto mínima"/>
-            <input type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
-            <textarea class="create-level-description" placeholder="Descrição do nível"></textarea>
-          </div>
+        <div class="level-holder">
+          
         </div>
         <div class="button-area">
-          <button class="next-step">Prosseguir pra criar níveis</button>
+          <button class="next-step" onclick="levelValidation()">Finalizar Quizz</button>
         </div>
       </div>
       <div class="quizz-created hidden">

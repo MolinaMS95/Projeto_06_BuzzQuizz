@@ -4,8 +4,8 @@ let currentQuiz;
 let questions = [];
 let hits = 0;
 let clicks = 0;
-let levels;
-const userQuizz ={title: undefined, image: undefined, questions: undefined, levels: undefined};
+let levels = 3;
+let userQuizz = {title: undefined, image: undefined, questions: undefined, levels:undefined};
 
 const resultBox = document.querySelector('.results');
 const buttonsBox = document.querySelector('.buttons');
@@ -15,6 +15,14 @@ const quizDiv = document.querySelector(".quiz");
 const questionHolder = quizDiv.querySelector(".question-holder");
 const quizHeader = document.querySelector('.quiz-header');
 
+const isValidUrl = urlString=> {
+    try { 
+        return Boolean(new URL(urlString)); 
+    }
+    catch(e){ 
+        return false; 
+    }
+}
 
 function getQuizzes(){
     const request = axios.get(apiURL);
@@ -192,6 +200,16 @@ function goHome(){
 function expand(item){
     const question = item.parentNode;
     question.querySelector('.container').classList.toggle('hidden');
+    const att = item.getAttribute('name');
+    switch(att){
+        case 'create-outline':
+            item.setAttribute('name', 'remove');
+            break;
+        default:
+            item.setAttribute('name', 'create-outline');
+            break;
+
+    }
 }
 
 function infoValidation(){
@@ -237,7 +255,7 @@ function createQuestions(questions){
             `<div class="create-question n${i+1}">
                 <p>Pergunta ${i+1}</p>
                 <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
-                <div class="container">
+                <div class="container hidden">
                     <div class="question-info">
                         <input class="create-text" placeholder="Texto da pergunta"/>
                         <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
@@ -275,7 +293,7 @@ function createQuestions(questions){
             `<div class="create-question n${i+1}">
                 <p>Pergunta ${i+1}</p>
                 <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
-                <div class="container">
+                <div class="container hidden">
                     <div class="question-info">
                         <input class="create-text" placeholder="Texto da pergunta"/>
                         <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
@@ -307,6 +325,77 @@ function createQuestions(questions){
         }
     }
 }
+function collapseToggle(element){
+    element.parentElement.querySelector(".level-info").toggle("hidden");
+}
+function createLevels(){
+    const levelHolder = document.querySelector(".level-holder");
+    for(let i = 0;i<levels;i++){
+        if(i===0){
+            levelHolder.innerHTML +=`
+            <div class="create-level">
+                <p>Nível ${i+1} </p>
+                <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
+                <div class="container hidden">
+                    <input class="create-level-title" placeholder="Título do nível"/>
+                    <input value="0" type="number" class="create-treshold" disabled/>
+                    <input type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
+                    <textarea class="create-level-description" placeholder="Descrição do nível"></textarea>
+                </div>
+            </div>
+        `
+        }else{
+            levelHolder.innerHTML +=`
+                <div class="create-level">
+                    <p>Nível ${i+1} </p>
+                    <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
+                    <div class="container hidden">
+                        <input class="create-level-title" placeholder="Título do nível"/>
+                        <input type="number" class="create-treshold" placeholder="% de acerto mínima"/>
+                        <input type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
+                        <textarea class="create-level-description" placeholder="Descrição do nível"></textarea>
+                    </div>
+                </div>
+            `
+        }
+       
+        
+    }
+}
+function levelValidation(){
+    const inputs = document.querySelectorAll(".create-level");
+    let failed = false;
+    const array = [];
+    for(let i = 0;i<inputs.length;i++){
+        const template = {};
+        const fields = inputs[i].querySelector(".container").children;
+        console.log(inputs[i].querySelector(".container"));
+        if(fields[0].value.length<8){
+            failed = true;
+        }
+        if(!isValidUrl(fields[2].value)){
+            failed = true;
+        }
+        if(fields[3].value.length<28){
+            failed = true;  
+        }
+        if(!failed){
+            template.title = fields[0].value;
+            template.minValue = fields[1].value;
+            template.text = fields[2].value;
+            template.image = new URL(fields[2].value);
+            array.push(template);
+        }
+    }
+    if(failed){
+        alert("deu ruim aí maluco");
+    }else{
+        userQuizz.levels = array;
+        console.log(userQuizz.levels);
+        document.querySelector(".quizz-levels").classList.add("hidden");
+        document.querySelector(".quizz-created").classList.remove("hidden");
+    }
+}
 
 /*function questionValidation(){
     const questionsTexts = document.querySelectorAll(".create-text");
@@ -315,4 +404,4 @@ function createQuestions(questions){
         if(!(textSizes.length < 20))
     }
 }*/
-window.onload = getQuizzes;
+window.onload =  createLevels;
