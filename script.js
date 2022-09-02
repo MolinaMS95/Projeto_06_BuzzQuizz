@@ -250,18 +250,18 @@ function createQuestions(questions){
                     <div class="wrong-answers">
                         <p>Respostas incorretas</p>
                         <div class="option1">
-                            <input class="create-wrong-answer1" placeholder="Reposta incorreta 1"/>
-                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 1"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 1"/>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 1"/>
                         </div>
 
                         <div class="option2">
-                            <input class="create-wrong-answer2" placeholder="Reposta incorreta 2"/>
-                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 2"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 2"/>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 2"/>
                         </div>
 
                         <div class="option3">
-                            <input class="create-wrong-answer3" placeholder="Reposta incorreta 3"/>
-                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 3"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 3"/>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 3"/>
                         </div>
                     </div>
                 </div>
@@ -288,18 +288,18 @@ function createQuestions(questions){
                     <div class="wrong-answers">
                         <p>Respostas incorretas</p>
                         <div class="option1">
-                            <input class="create-wrong-answer1" placeholder="Reposta incorreta 1"/>
-                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 1"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 1"/>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 1"/>
                         </div>
     
                         <div class="option2">
-                            <input class="create-wrong-answer2" placeholder="Reposta incorreta 2"/>
-                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 2"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 2"/>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 2"/>
                         </div>
     
                         <div class="option3">
-                            <input class="create-wrong-answer3" placeholder="Reposta incorreta 3"/>
-                            <input type="url" class="create-wrong-answer-URL" placeholder="URL da imagem 3"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 3"/>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 3"/>
                         </div>
                     </div>
                 </div>
@@ -308,11 +308,55 @@ function createQuestions(questions){
     }
 }
 
-/*function questionValidation(){
+function questionValidation(){
     const questionsTexts = document.querySelectorAll(".create-text");
+    const questionsColors = document.querySelectorAll(".create-color");
+    const questions = [];
     for (let i = 0; i < questionsTexts.length; i++){
         let textSizes = questionsTexts[i].value;
-        if(!(textSizes.length < 20))
+        let colors = questionsColors[i].value;
+        if(!(textSizes.length < 20)){
+            questions[i] = {title: textSizes, color: colors, answers: []};
+        }
+        else{
+            alert("A pergunta deve ter mais que 19 caracteres!");
+            return;
+        }
     }
-}*/
+    userQuizz.questions = questions;
+    answersValidation();
+}
+
+function answersValidation(){
+    const questionContainer = document.querySelectorAll(".create-question");
+    let containRightAnswer = false;
+    for (let i = 0; i < questionContainer.length; i++){
+        const allAnswers = questionContainer[i].querySelectorAll(".create-answer");
+        const allImgs = questionContainer[i].querySelectorAll(".create-answer-URL");
+        for (let n = 0; n < allAnswers.length; n++){
+            let answerText = allAnswers[n].value;
+            let answerTextVerification = (answerText != "");
+            let answerImg = allImgs[n].value;
+            let answerImgVerification = answerImg.includes("https://");
+            if(answerTextVerification && (!answerImgVerification)){
+                alert('Sua URL de imagem deve ter um formato válido');
+                return;
+            }
+            else if(answerTextVerification && answerImgVerification){
+                if(allAnswers[n].parentNode.classList.contains("correct-answer")){
+                    userQuizz.questions[i].answers[n] = {text: answerText, image: answerImg, isCorrectAnswer: true};
+                    containRightAnswer = true;
+                }
+                else{
+                    userQuizz.questions[i].answers[n] = {text: answerText, image: answerImg, isCorrectAnswer: false};
+                }
+            }
+        }
+        if (userQuizz.questions[i].answers.length < 2 || (!containRightAnswer)){
+            alert("Você deve inserir a resposta certa e pelo menos uma errada!");
+            return;
+        }
+        containRightAnswer = false;
+    }
+}
 window.onload = getQuizzes;
