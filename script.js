@@ -43,15 +43,14 @@ function getPersonalQuizData(){
     if(JSON.parse(listaSerializada)!=null){
         personalQuizzesID = JSON.parse(listaSerializada);
     }
-    /* if(personalQuizzesID.length>0){
+    if(personalQuizzesID.length>0){
         for(let i = 0;i<personalQuizzesID.length;i++){
             const request = axios.get(apiURL+personalQuizzesID[i]);
             request.then(pushPersonalQuiz);
         }
     }else{
         listQuizzes();
-    } */
-    listQuizzes();
+    }
 }
 function pushPersonalQuiz(data){
     personalQuizzesData.push(data.data);
