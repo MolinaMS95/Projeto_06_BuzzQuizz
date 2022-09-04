@@ -105,7 +105,6 @@ function singleQuizRequestSuccess(data){
     displayQuiz(data.data);
 }
 
-//Mostra um quiz apenas
 function displayQuiz(quizData){
     currentQuiz = quizData;
     homeDiv.classList.add("hidden");
