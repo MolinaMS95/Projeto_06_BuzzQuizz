@@ -39,8 +39,10 @@ function getQuizzSuccess(data){
 }
 function getPersonalQuizData(){
     personalQuizzesData.length = 0;
-    const listaSerializada = localStorage.getItem("myQuizzes"); 
-    personalQuizzesID = JSON.parse(listaSerializada);
+    const listaSerializada = localStorage.getItem("myQuizzes");
+    if(JSON.parse(listaSerializada)!=null){
+        personalQuizzesID = JSON.parse(listaSerializada);
+    }
     /* if(personalQuizzesID.length>0){
         for(let i = 0;i<personalQuizzesID.length;i++){
             const request = axios.get(apiURL+personalQuizzesID[i]);
