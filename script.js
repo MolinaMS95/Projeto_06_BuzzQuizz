@@ -4,17 +4,21 @@ let currentQuiz;
 let questions = [];
 let hits = 0;
 let clicks = 0;
-let levels = 3;
+let levels = 0;
 let userQuizz = {title: undefined, image: undefined, questions: undefined, levels:undefined};
-let personalQuizzes = [];
+let personalQuizzesID = [];
+let personalQuizzesData = [];
 
 const resultBox = document.querySelector('.results');
 const buttonsBox = document.querySelector('.buttons');
 const quizDisplayList = document.querySelector(".quiz-display-list");
-const quizListHolder = document.querySelector(".quiz-list-holder");
+const homeDiv = document.querySelector(".home");
 const quizDiv = document.querySelector(".quiz");
 const questionHolder = quizDiv.querySelector(".question-holder");
 const quizHeader = document.querySelector('.quiz-header');
+const quizzCreation = document.querySelector(".quizz-creation");
+const personalQuizDiv =  document.querySelector(".personal-quiz");
+const createQuizDiv =  document.querySelector(".create-quiz");
 
 const isValidUrl = urlString=> {
     try { 
@@ -29,12 +33,34 @@ function getQuizzes(){
     const request = axios.get(apiURL);
     request.then(getQuizzSuccess);
 }
-
 function getQuizzSuccess(data){
     quizzes = data.data;
+    getPersonalQuizData();
+}
+function getPersonalQuizData(){
+    personalQuizzesData.length = 0;
+    const listaSerializada = localStorage.getItem("myQuizzes"); 
+    personalQuizzesID = JSON.parse(listaSerializada);
+    /* if(personalQuizzesID.length>0){
+        for(let i = 0;i<personalQuizzesID.length;i++){
+            const request = axios.get(apiURL+personalQuizzesID[i]);
+            request.then(pushPersonalQuiz);
+        }
+    }else{
+        listQuizzes();
+    } */
     listQuizzes();
 }
+function pushPersonalQuiz(data){
+    personalQuizzesData.push(data.data);
+    if(personalQuizzesData.length === personalQuizzesID.length){
+        listQuizzes();
+    }
+    console.log(personalQuizzesData);
+}
+
 function listQuizzes(){
+    createQuizDiv.classList.remove("hidden");
     quizDisplayList.innerHTML='';
     for(let i = 0; i<quizzes.length;i++){
         quizDisplayList.innerHTML+=`
@@ -47,6 +73,24 @@ function listQuizzes(){
                 <p class="quiz-display-title">${quizzes[i].title}</p>
             </li>
         `
+    }
+    if(personalQuizzesData.length>0){
+        createQuizDiv.classList.add("hidden");
+        personalQuizDiv.classList.remove("hidden");
+        const list = personalQuizDiv.querySelector(".personal-quiz-list");
+        list.innerHTML = '';
+        for(let i = 0; i<personalQuizzesData.length;i++){
+            list.innerHTML+=`
+                <li
+                    onclick="getSingleQuiz(this)"
+                    class="quiz-display" 
+                    style="background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.904) 100%), url('${personalQuizzesData[i].image}')" 
+                    id="${personalQuizzesData[i].id}"
+                >
+                    <p class="quiz-display-title">${personalQuizzesData[i].title}</p>
+                </li>
+            `
+        }
     }
 }
 
@@ -64,7 +108,7 @@ function singleQuizRequestSuccess(data){
 function displayQuiz(quizData){
     currentQuiz = quizData;
     console.log(quizData);
-    quizListHolder.classList.add("hidden");
+    homeDiv.classList.add("hidden");
     quizDiv.classList.remove("hidden");
     questionHolder.innerHTML = '';
     quizHeader.style.backgroundImage = `url("${quizData.image}")`;
@@ -189,13 +233,20 @@ function restart(){
     }
     quizHeader.scrollIntoView();
 }
-
+ 
 function goHome(){
     buttonsBox.classList.add('hidden');
     resultBox.classList.add('hidden');
-    quizListHolder.classList.remove("hidden");
+    homeDiv.classList.remove("hidden");
     quizDiv.classList.add("hidden");
     getQuizzes();
+}
+function goHome2(){
+    document.querySelector(".quizz-created").classList.add("hidden");
+    quizzCreation.classList.add("hidden");
+    document.querySelector(".home").classList.remove("hidden");
+    getQuizzes();
+
 }
 
 function expand(item){
@@ -211,6 +262,14 @@ function expand(item){
             break;
 
     }
+}
+function createQuizStart(){
+    homeDiv.classList.add("hidden");
+    quizzCreation.querySelector(".quizz-questions").classList.add("hidden");
+    quizzCreation.querySelector(".quizz-levels").classList.add("hidden");
+    quizzCreation.querySelector(".quizz-created").classList.add("hidden");
+    quizzCreation.classList.remove("hidden");
+    quizzCreation.querySelector(".basic-info").classList.remove("hidden");
 }
 
 function infoValidation(){
@@ -385,7 +444,7 @@ function levelValidation(){
         if(!failed){
             template.title = fields[0].value;
             template.minValue = fields[1].value;
-            template.text = fields[2].value;
+            template.text = fields[3].value;
             template.image = new URL(fields[2].value);
             array.push(template);
         }
@@ -395,8 +454,6 @@ function levelValidation(){
     }else{
         userQuizz.levels = array;
         console.log(userQuizz.levels);
-        document.querySelector(".quizz-levels").classList.add("hidden");
-        document.querySelector(".quizz-created").classList.remove("hidden");
         saveQuizz();
     }
 }
@@ -463,8 +520,14 @@ function saveQuizz(){
 function quizzSavedSuccesfully(data){
     const quizz = data.data;
     const quizzID = quizz.id;
-    personalQuizzes.push(quizzID);
-    const serializedQuizzes = JSON.stringify(personalQuizzes);
+    personalQuizzesID.push(quizzID);
+    const serializedQuizzes = JSON.stringify(personalQuizzesID);
     localStorage.setItem("myQuizzes", serializedQuizzes);
+    document.querySelector(".quizz-levels").classList.add("hidden");
+    const created = document.querySelector(".quizz-created");
+    created.classList.remove("hidden");
+    created.querySelector(".access-quiz").id = quizz.id;
 }
+
+
 window.onload = getQuizzes;

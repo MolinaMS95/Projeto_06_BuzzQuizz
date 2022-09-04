@@ -20,17 +20,26 @@
     </header>
 
     <main>
-        <div class="create-quiz hidden">
-          <p>Você não criou nenhum quiz ainda :(</p>
-          <p class="create-quiz-button">Criar Quiz</p>
-        </div>
-        <div class="quiz-list-holder hidden">
-          <p class="quiz-list-title" >Todos os Quizzes</p>
-          <ul class="quiz-display-list">
-            <li class="quiz-display">
-              <p class="quiz-display-title"></p>
-            </li>
-          </ul>
+        <div class="home"> 
+          <div class="create-quiz">
+            <p>Você não criou nenhum quiz ainda :(</p>
+            <p class="create-quiz-button" onclick="createQuizStart()">Criar Quiz</p>
+          </div>
+          <div class="personal-quiz hidden">
+            <p class="personal-quiz-title">Seus Quizzes</p>
+            <ion-icon class="create-quiz-icon" name="add-circle" onclick="createQuizStart()"></ion-icon>
+            <ul class="personal-quiz-list">
+
+            </ul>
+          </div>
+          <div class="quiz-list-holder">
+            <p class="quiz-list-title" >Todos os Quizzes</p>
+            <ul class="quiz-display-list">
+              <li class="quiz-display">
+                <p class="quiz-display-title"></p>
+              </li>
+            </ul>
+          </div>
         </div>
         
         <div class="quiz hidden">
@@ -78,8 +87,8 @@
         </div>
         <div class="new-quizz"></div>
         <div class="buttons">
-          <button>Acessar Quizz</button>
-          <p>Voltar pra home</p>
+          <button class="access-quiz" onclick="getSingleQuiz(this)">Acessar Quizz</button>
+          <p onclick="goHome2()">Voltar pra home</p>
         </div>
       </div>
     </div>

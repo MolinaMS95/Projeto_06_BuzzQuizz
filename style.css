@@ -24,23 +24,54 @@ header{
 }
 main{
     padding-top:69px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    
 }
 body{
     background-color: #f5f5f5;
+    width: 100%;
+}
+.home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.personal-quiz{
+    width: 100%;
+    position: relative;
+}
+.create-quiz-icon{
+    position:absolute;
+    top: 5px;
+    left: 305px;
+
+    font-size: 40px;
+    color: #EC362D;
+}
+.personal-quiz-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.personal-quiz-title{
+    font-weight: 700;
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 .create-quiz{
     margin-top: 20px;
-
+    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
 
     width: 100%;
-    max-width: 340px;
-    aspect-ratio: 340/181;
+    height: 181px;
 
     border: 2px dashed #D5D5D5;
     border-radius: 5px;
@@ -54,12 +85,13 @@ body{
     align-items: center;
     text-align: center;
     text-align: center;
+
     margin-left: 30px;
     margin-right: 30px;
     margin-top: 40px;
 }
 .create-quiz p:nth-child(2){
-    border: 2px dashed #EC362D;;
+    border: 2px dashed #EC362D;
     border-radius: 20px;
     width: 151px;
     height: 40px;
@@ -67,22 +99,27 @@ body{
     font-size: 21px;
     text-align: center;
     line-height: 40px;
+    color: #EC362D;
 
     margin: auto;
+}
+
+.quiz-list-holder{
+    width:100%;
 }
 .quiz-list-title{
     font-weight: 700;
     font-size: 20px;
-    margin:20px;
+
+    margin-bottom: 15px;
 }
 .quiz-display-list{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    
-    padding-left: 20px;
 }
 .quiz-display{
+    
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -96,9 +133,6 @@ body{
     margin-right: 15px;
     border-radius: 8px;
 
-    background-image: 
-    linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.904) 100%),
-    url('img/Hogwarts.webp');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -163,6 +197,7 @@ body{
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+
     width: 100%;
 }
 .answer{
