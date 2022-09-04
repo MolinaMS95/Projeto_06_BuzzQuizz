@@ -97,7 +97,9 @@ function listQuizzes(){
 function getSingleQuiz(element){
     const url = apiURL+element.id;
     const request = axios.get(url);
-    request.then(singleQuizRequestSuccess)
+    request.then(singleQuizRequestSuccess);
+    document.querySelector(".quizz-creation").classList.add('hidden');
+    document.querySelector(".quizz-created").classList.add('hidden');
 }
 
 function singleQuizRequestSuccess(data){
@@ -390,6 +392,7 @@ function createLevels(){
     document.querySelector('.quizz-questions').classList.add('hidden');
     document.querySelector(".quizz-levels").classList.remove("hidden");
     const levelHolder = document.querySelector(".level-holder");
+    levelHolder.innerHTML = ""
     for(let i = 0;i<levels;i++){
         if(i===0){
             levelHolder.innerHTML +=`
@@ -453,7 +456,17 @@ function levelValidation(){
         saveQuizz();
         document.querySelector(".quizz-levels").classList.add("hidden");
         document.querySelector(".quizz-created").classList.remove("hidden");
+        quizzSample();
     }
+}
+
+function quizzSample(){
+    const sample = document.querySelector('.new-quizz');
+    sample.innerHTML = 
+    `<div class="quiz-display" 
+    style="background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.904) 100%), url('${userQuizz.image}')">
+    <p class="quiz-display-title">${userQuizz.title}</p>
+    </div>`
 }
 
 function questionValidation(){
