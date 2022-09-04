@@ -39,8 +39,10 @@ function getQuizzSuccess(data){
 }
 function getPersonalQuizData(){
     personalQuizzesData.length = 0;
-    const listaSerializada = localStorage.getItem("myQuizzes"); 
-    personalQuizzesID = JSON.parse(listaSerializada);
+    const listaSerializada = localStorage.getItem("myQuizzes");
+    if(JSON.parse(listaSerializada)!=null){
+        personalQuizzesID = JSON.parse(listaSerializada);
+    }
     if(personalQuizzesID.length>0){
         for(let i = 0;i<personalQuizzesID.length;i++){
             const request = axios.get(apiURL+personalQuizzesID[i]);
@@ -55,7 +57,6 @@ function pushPersonalQuiz(data){
     if(personalQuizzesData.length === personalQuizzesID.length){
         listQuizzes();
     }
-    console.log(personalQuizzesData);
 }
 
 function listQuizzes(){
@@ -106,7 +107,6 @@ function singleQuizRequestSuccess(data){
 //Mostra um quiz apenas
 function displayQuiz(quizData){
     currentQuiz = quizData;
-    console.log(quizData);
     homeDiv.classList.add("hidden");
     quizDiv.classList.remove("hidden");
     questionHolder.innerHTML = '';
@@ -185,8 +185,6 @@ function selectAnswer(answer){
         }
         question.classList.add('answered');
     }
-    console.log(clicks);
-    console.log(hits);
 }
 
 function scrollNext(element){
@@ -199,7 +197,6 @@ function finishQuizz(){
     resultBox.classList.remove('hidden');
     let sortedLevels = currentQuiz.levels;
     sortedLevels.sort(function(a, b){return b - a});
-    console.log(sortedLevels)
     for(let i = sortedLevels.length; i > 0; i--){
         if(hitPercent >= sortedLevels[i-1].minValue){
             resultBox.innerHTML =
@@ -238,6 +235,9 @@ function goHome(){
     resultBox.classList.add('hidden');
     homeDiv.classList.remove("hidden");
     quizDiv.classList.add("hidden");
+    questions = [];
+    clicks = 0;
+    hits = 0;
     getQuizzes();
 }
 function goHome2(){
@@ -326,17 +326,17 @@ function createQuestions(questions){
                     </div>
                     <div class="wrong-answers">
                         <p>Respostas incorretas</p>
-                        <div class="option1">
+                        <div class="option">
                             <input class="create-answer" placeholder="Reposta incorreta 1"/>
                             <input type="url" class="create-answer-URL" placeholder="URL da imagem 1"/>
                         </div>
 
-                        <div class="option2">
+                        <div class="option">
                             <input class="create-answer" placeholder="Reposta incorreta 2"/>
                             <input type="url" class="create-answer-URL" placeholder="URL da imagem 2"/>
                         </div>
 
-                        <div class="option3">
+                        <div class="option">
                             <input class="create-answer" placeholder="Reposta incorreta 3"/>
                             <input type="url" class="create-answer-URL" placeholder="URL da imagem 3"/>
                         </div>
@@ -364,17 +364,17 @@ function createQuestions(questions){
                     </div>
                     <div class="wrong-answers">
                         <p>Respostas incorretas</p>
-                        <div class="option1">
+                        <div class="option">
                             <input class="create-answer" placeholder="Reposta incorreta 1"/>
                             <input type="url" class="create-answer-URL" placeholder="URL da imagem 1"/>
                         </div>
     
-                        <div class="option2">
+                        <div class="option">
                             <input class="create-answer" placeholder="Reposta incorreta 2"/>
                             <input type="url" class="create-answer-URL" placeholder="URL da imagem 2"/>
                         </div>
     
-                        <div class="option3">
+                        <div class="option">
                             <input class="create-answer" placeholder="Reposta incorreta 3"/>
                             <input type="url" class="create-answer-URL" placeholder="URL da imagem 3"/>
                         </div>
@@ -430,7 +430,6 @@ function levelValidation(){
     for(let i = 0;i<inputs.length;i++){
         const template = {};
         const fields = inputs[i].querySelector(".container").children;
-        console.log(inputs[i].querySelector(".container"));
         if(fields[0].value.length<8){
             failed = true;
         }
@@ -452,8 +451,9 @@ function levelValidation(){
         alert("deu ruim aí maluco");
     }else{
         userQuizz.levels = array;
-        console.log(userQuizz.levels);
         saveQuizz();
+        document.querySelector(".quizz-levels").classList.add("hidden");
+        document.querySelector(".quizz-created").classList.remove("hidden");
     }
 }
 
@@ -513,7 +513,6 @@ function answersValidation(){
 function saveQuizz(){
     const promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', userQuizz);
     promise.then(quizzSavedSuccesfully);
-    promise.catch(errorSaving);
 }
 
 function quizzSavedSuccesfully(data){
