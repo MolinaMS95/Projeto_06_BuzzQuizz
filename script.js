@@ -512,7 +512,6 @@ function answersValidation(){
 function saveQuizz(){
     const promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', userQuizz);
     promise.then(quizzSavedSuccesfully);
-    promise.catch(errorSaving);
 }
 
 function quizzSavedSuccesfully(data){
