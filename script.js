@@ -661,9 +661,9 @@ function deleteQuiz(item){
 }
 
 function successDelete(){
-    personalQuizzesData.splice(position);
-    personalQuizzesID.splice(position);
-    personalQuizzesKey.splice(position);
+    personalQuizzesData.splice(position, 1);
+    personalQuizzesID.splice(position, 1);
+    personalQuizzesKey.splice(position, 1);
     const serializedQuizzes = JSON.stringify(personalQuizzesID);
     const serializedKeys = JSON.stringify(personalQuizzesKey);
     localStorage.setItem("myQuizzes", serializedQuizzes);
