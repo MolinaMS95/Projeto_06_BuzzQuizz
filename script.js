@@ -464,7 +464,7 @@ function createLevels(){
                     <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
                     <div class="container hidden">
                         <input class="create-level-input" placeholder="Título do nível"/><p class='error'></p>
-                        <input class="create-level-input" type="number" class="create-treshold" placeholder="% de acerto mínima"/>
+                        <input class="create-level-input" type="number" class="create-treshold" placeholder="% de acerto mínima"/><p class='error'></p>
                         <input class="create-level-input" type="url" class="create-level-URL" placeholder="URL da imagem do nível"/><p class='error'></p>
                         <textarea class="create-level-input" placeholder="Descrição do nível"></textarea><p class='error'></p>
                     </div>
