@@ -456,6 +456,14 @@ function levelValidation(){
             fields[0].insertAdjacentHTML("afterend", error1);
             fields[0].style = "background: #FFE9E9";
         }
+        if(i>0){
+            if((fields[1].value<1)||(fields[1].value>100)){
+                failed = true;
+                const error2 = "<p class='error'>O número deve estar entre 1 e 100</p>";
+                fields[1].insertAdjacentHTML("afterend", error2);
+                fields[1].style = "background: #FFE9E9";
+            }
+        }
         if(!isValidUrl(fields[2].value)){
             failed = true;
             const error3 = "<p class='error'>A URL deve ter um formato válido</p>";
@@ -468,6 +476,7 @@ function levelValidation(){
             fields[3].insertAdjacentHTML("afterend", error4);
             fields[3].style = "background: #FFE9E9";
         }
+        
         if(!failed){
             template.title = fields[0].value;
             template.minValue = fields[1].value;
