@@ -121,7 +121,7 @@ function displayQuiz(quizData){
     }
     document.querySelector('.loading-page').classList.add('hidden');
     quizDiv.classList.remove("hidden");
-    quizHeader.scrollIntoView();
+    window.scrollTo(0,0);
 }
 
 function displayQuestion(data, holder, id){
@@ -233,7 +233,7 @@ function restart(){
         answers[i].lastElementChild.classList.remove('correct');
         answers[i].lastElementChild.classList.remove('wrong');
     }
-    quizHeader.scrollIntoView();
+    window.scrollTo(0,0);
 }
  
 function goHome(){
@@ -243,14 +243,15 @@ function goHome(){
     questions = [];
     clicks = 0;
     hits = 0;
+    window.scrollTo(0,0);
     getQuizzes();
 }
 function goHome2(){
     document.querySelector(".quizz-created").classList.add("hidden");
     quizzCreation.classList.add("hidden");
     document.querySelector(".home").classList.remove("hidden");
+    window.scrollTo(0,0);
     getQuizzes();
-
 }
 
 function expand(item){
@@ -393,9 +394,7 @@ function createQuestions(questions){
         }
     }
 }
-function collapseToggle(element){
-    element.parentElement.querySelector(".level-info").toggle("hidden");
-}
+
 function createLevels(){
     document.querySelector('.quizz-questions').classList.add('hidden');
     document.querySelector(".quizz-levels").classList.remove("hidden");
