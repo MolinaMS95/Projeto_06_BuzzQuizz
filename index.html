@@ -20,7 +20,8 @@
     </header>
 
     <main>
-        <div class="home"> 
+      <div class="home">
+        <div>
           <div class="create-quiz">
             <p>Você não criou nenhum quiz ainda :(</p>
             <p class="create-quiz-button" onclick="createQuizStart()">Criar Quiz</p>
@@ -41,19 +42,18 @@
             </ul>
           </div>
         </div>
-        
-        <div class="quiz hidden">
-          <div class="quiz-header">
-            <h2 class="quiz-title"></h2>
-          </div>
-          <div class="question-holder"> </div>
-          <div class="results hidden"></div>
-          <div class="buttons hidden">
-            <button onclick="restart()">Reiniciar Quizz</button>
-            <p onclick="goHome()">Voltar pra home</p>
-          </div>  
+      </div>
+      <div class="quiz hidden">
+        <div class="quiz-header">
+          <h2 class="quiz-title"></h2>
         </div>
-
+        <div class="question-holder"> </div>
+        <div class="results hidden"></div>
+        <div class="buttons hidden">
+          <button onclick="restart()">Reiniciar Quizz</button>
+          <p onclick="goHome()">Voltar pra home</p>
+        </div>  
+      </div>
     </main>
 
     <div class="quizz-creation hidden">

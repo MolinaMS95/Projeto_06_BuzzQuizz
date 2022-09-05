@@ -116,7 +116,7 @@ function displayQuiz(quizData){
     for(let i = 0; i<quizData.questions.length;i++){
         displayQuestion(quizData.questions[i], questionHolder, i);
     }
-    quizHeader.scrollIntoView();
+    window.scrollTo(0,0);
 }
 
 function displayQuestion(data, holder, id){
@@ -228,7 +228,7 @@ function restart(){
         answers[i].lastElementChild.classList.remove('correct');
         answers[i].lastElementChild.classList.remove('wrong');
     }
-    quizHeader.scrollIntoView();
+    window.scrollTo(0,0);
 }
  
 function goHome(){
@@ -239,14 +239,15 @@ function goHome(){
     questions = [];
     clicks = 0;
     hits = 0;
+    window.scrollTo(0,0);
     getQuizzes();
 }
 function goHome2(){
     document.querySelector(".quizz-created").classList.add("hidden");
     quizzCreation.classList.add("hidden");
     document.querySelector(".home").classList.remove("hidden");
+    window.scrollTo(0,0);
     getQuizzes();
-
 }
 
 function expand(item){
