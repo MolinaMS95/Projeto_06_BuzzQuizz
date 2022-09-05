@@ -10,6 +10,9 @@ let personalQuizzesID = [];
 let personalQuizzesKey = [];
 let personalQuizzesData = [];
 let position;
+let quizToEdit = {};
+let editOrErase = false;
+let edit = false;
 
 const resultBox = document.querySelector('.results');
 const buttonsBox = document.querySelector('.buttons');
@@ -100,7 +103,7 @@ function listQuizzes(){
                 >
                     <p class="quiz-display-title">${personalQuizzesData[i].title}</p>
                     <div class="icons">
-                        <ion-icon name="create-outline"></ion-icon>
+                        <ion-icon onclick="editQuiz(this)" name="create-outline"></ion-icon>
                         <ion-icon onclick="deleteQuiz(this)" name="trash-outline"></ion-icon>
                     </div>
                 </li>
@@ -110,13 +113,18 @@ function listQuizzes(){
 }
 
 function getSingleQuiz(element){
-    homeDiv.classList.add("hidden");
-    document.querySelector('.loading-page').classList.remove('hidden');
-    const url = apiURL+element.id;
-    const request = axios.get(url);
-    request.then(singleQuizRequestSuccess);
-    document.querySelector(".quizz-creation").classList.add('hidden');
-    document.querySelector(".quizz-created").classList.add('hidden');
+    if(editOrErase){
+        return;
+    }
+    else{
+        homeDiv.classList.add("hidden");
+        document.querySelector('.loading-page').classList.remove('hidden');
+        const url = apiURL+element.id;
+        const request = axios.get(url);
+        request.then(singleQuizRequestSuccess);
+        document.querySelector(".quizz-creation").classList.add('hidden');
+        document.querySelector(".quizz-created").classList.add('hidden');
+    }
 }
 
 function singleQuizRequestSuccess(data){
@@ -295,11 +303,19 @@ function infoValidation(){
         document.querySelector(".create-title").nextElementSibling.innerHTML = "Título deve ter entre 20 e 65 caracteres";
         document.querySelector(".create-title").style = "background: #FFE9E9";
     }
+    else {
+        document.querySelector(".create-title").nextElementSibling.innerHTML = "";
+        document.querySelector(".create-title").style = "background: #FFFFFF";
+    }
     const url = document.querySelector(".img-URL").value;
     const urlVerification = isValidUrl(url);
     if(!urlVerification){
         document.querySelector(".img-URL").nextElementSibling.innerHTML ="Sua URL de imagem deve ter um formato válido";
         document.querySelector(".img-URL").style = "background: #FFE9E9";
+    }
+    else {
+        document.querySelector(".img-URL").nextElementSibling.innerHTML = "";
+        document.querySelector(".img-URL").style = "background: #FFFFFF";
     }
     const questions = document.querySelector(".questions-amount").value;
     const questionsVerification = 2 < questions;
@@ -307,15 +323,27 @@ function infoValidation(){
         document.querySelector(".questions-amount").nextElementSibling.innerHTML ="Deve ter pelo menos 3 perguntas";
         document.querySelector(".questions-amount").style = "background: #FFE9E9";
     }
+    else {
+        document.querySelector(".questions-amount").nextElementSibling.innerHTML = "";
+        document.querySelector(".questions-amount").style = "background: #FFFFFF";
+    }
     levels = document.querySelector(".levels-amount").value;
     const levelsVerification = 1 < levels;
     if(!levelsVerification){
         document.querySelector(".levels-amount").nextElementSibling.innerHTML ="Deve ter pelo menos 2 níveis";
         document.querySelector(".levels-amount").style = "background: #FFE9E9";
     }
+    else {
+        document.querySelector(".levels-amount").nextElementSibling.innerHTML = "";
+        document.querySelector(".levels-amount").style = "background: #FFFFFF";
+    }
     if(titleVerification && urlVerification && questionsVerification && levelsVerification){
         userQuizz.title = title;
         userQuizz.image = url;
+        document.querySelector(".create-title").value = "";
+        document.querySelector(".img-URL").value = "";
+        document.querySelector(".questions-amount").value = "";
+        document.querySelector(".levels-amount").value = "";
         createQuestions(questions);
     }
 }
@@ -404,6 +432,10 @@ function createQuestions(questions){
             </div>`
         }
     }
+    if(edit){
+        fillQuestions();
+        fillAnswers();
+    }
 }
 
 function createLevels(){
@@ -418,10 +450,10 @@ function createLevels(){
                 <p>Nível ${i+1} </p>
                 <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
                 <div class="container hidden">
-                    <input class="create-level-input" placeholder="Título do nível"/>
+                    <input class="create-level-input" placeholder="Título do nível"/><p class='error'></p>
                     <input class="create-level-input" value="0" type="number" class="create-treshold" disabled/>
-                    <input class="create-level-input" type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
-                    <textarea class="create-level-input" placeholder="Descrição do nível"></textarea>
+                    <input class="create-level-input" type="url" class="create-level-URL" placeholder="URL da imagem do nível"/><p class='error'></p>
+                    <textarea class="create-level-input" placeholder="Descrição do nível"></textarea><p class='error'></p>
                 </div>
             </div>
         `
@@ -431,16 +463,17 @@ function createLevels(){
                     <p>Nível ${i+1} </p>
                     <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
                     <div class="container hidden">
-                        <input class="create-level-input" placeholder="Título do nível"/>
+                        <input class="create-level-input" placeholder="Título do nível"/><p class='error'></p>
                         <input class="create-level-input" type="number" class="create-treshold" placeholder="% de acerto mínima"/>
-                        <input class="create-level-input" type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
-                        <textarea class="create-level-input" placeholder="Descrição do nível"></textarea>
+                        <input class="create-level-input" type="url" class="create-level-URL" placeholder="URL da imagem do nível"/><p class='error'></p>
+                        <textarea class="create-level-input" placeholder="Descrição do nível"></textarea><p class='error'></p>
                     </div>
                 </div>
             `
-        }
-       
-        
+        }  
+    }
+    if(edit){
+        fillLevels();
     }
 }
 function levelValidation(){
@@ -452,21 +485,30 @@ function levelValidation(){
         const fields = inputs[i].querySelectorAll(".container .create-level-input");
         if(fields[0].value.length<10){
             failed = true;
-            const error1 = "<p class='error'>O Título deve ter no mínimo 10 caracteres</p>";
-            fields[0].insertAdjacentHTML("afterend", error1);
+            fields[0].nextElementSibling.innerHTML = 'O Título deve ter no mínimo 10 caracteres';
             fields[0].style = "background: #FFE9E9";
+        }
+        else{
+            fields[0].nextElementSibling.innerHTML = '';
+            fields[0].style = "background: #FFFFFF";
         }
         if(!isValidUrl(fields[2].value)){
             failed = true;
-            const error3 = "<p class='error'>A URL deve ter um formato válido</p>";
-            fields[2].insertAdjacentHTML("afterend", error3);
+            fields[2].nextElementSibling.innerHTML = 'A URL deve ter um formato válido';
             fields[2].style = "background: #FFE9E9";
+        }
+        else{
+            fields[2].nextElementSibling.innerHTML = '';
+            fields[2].style = "background: #FFFFFF";
         }
         if(fields[3].value.length<30){
             failed = true;
-            const error4 = "<p class='error'>A descrição deve ter pelo menos 30 caracteres</p>";
-            fields[3].insertAdjacentHTML("afterend", error4);
+            fields[3].nextElementSibling.innerHTML = 'A descrição deve ter pelo menos 30 caracteres';
             fields[3].style = "background: #FFE9E9";
+        }
+        else{
+            fields[3].nextElementSibling.innerHTML = '';
+            fields[3].style = "background: #FFFFFF";
         }
         if(!failed){
             template.title = fields[0].value;
@@ -479,8 +521,14 @@ function levelValidation(){
     if(failed){
         return;
     }else{
-        userQuizz.levels = array;
-        saveQuizz();
+        if(edit){
+            userQuizz.levels = array;
+            sendQuiz();
+        }
+        else{
+            userQuizz.levels = array;
+            saveQuizz();
+        }
         document.querySelector(".quizz-levels").classList.add("hidden");
         document.querySelector(".quizz-created").classList.remove("hidden");
         quizzSample();
@@ -490,10 +538,10 @@ function levelValidation(){
 function quizzSample(){
     const sample = document.querySelector('.new-quizz');
     sample.innerHTML = 
-    `<div class="quiz-display" 
-    style="background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.904) 100%), url('${userQuizz.image}')">
-    <p class="quiz-display-title">${userQuizz.title}</p>
-    </div>`
+        `<div class="quiz-display" 
+            style="background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.904) 100%), url('${userQuizz.image}')">
+            <p class="quiz-display-title">${userQuizz.title}</p>
+        </div>`
 }
 
 function questionValidation(){
@@ -505,6 +553,8 @@ function questionValidation(){
         let colors = questionsColors[i].value;
         if(!(textSizes.length < 20)){
             questions[i] = {title: textSizes, color: colors, answers: []};
+            questionsTexts[i].nextElementSibling.innerHTML = "";
+            questionsTexts[i].style = "background: #FFFFFF";
         }
         else{
             questionsTexts[i].nextElementSibling.innerHTML = "A pergunta deve ter mais que 19 caracteres!";
@@ -534,15 +584,19 @@ function answersValidation(){
             }
             else if(answerTextVerification && answerImgVerification){
                 if(allAnswers[n].parentNode.classList.contains("correct-answer")){
-                    userQuizz.questions[i].answers[n] = {text: answerText, image: answerImg, isCorrectAnswer: true};
+                   userQuizz.questions[i].answers[n] = {text: answerText, image: answerImg, isCorrectAnswer: true};
                     containRightAnswer = true;
+                    allImgs[n].nextElementSibling.innerHTML = '';
+                    allImgs[n].style = "background: #FFFFFF";
                 }
                 else{
                     userQuizz.questions[i].answers[n] = {text: answerText, image: answerImg, isCorrectAnswer: false};
+                    allImgs[n].nextElementSibling.innerHTML = '';
+                    allImgs[n].style = "background: #FFFFFF";
                 }
             }
         }
-        if (userQuizz.questions[i].answers.length < 2 || (!containRightAnswer)){
+        if (quizToEdit.questions[i].answers.length < 2 || (!containRightAnswer)){
             if(!containRightAnswer){
                 allAnswers[0].nextElementSibling.innerHTML="Você deve inserir a resposta certa e pelo menos uma errada!";
                 allAnswers[0].style = "background: #FFE9E9";
@@ -580,6 +634,7 @@ function quizzSavedSuccesfully(data){
 }
 
 function deleteQuiz(item){
+    editOrErase = true;
     const confirmation = confirm("Deseja deletar esse quiz?");
     if(confirmation){
         const url = apiURL+item.parentNode.parentNode.id;
@@ -589,6 +644,7 @@ function deleteQuiz(item){
         promise.then(successDelete);
     }
     else{
+        editOrErase = false;
         return;
     }
 }
@@ -604,4 +660,65 @@ function successDelete(){
     location.reload();
 }
 
+function editQuiz(item){
+    editOrErase = true;
+    edit = true;
+    position = personalQuizzesID.indexOf(Number(item.parentNode.parentNode.id));
+    const url = apiURL+item.parentNode.parentNode.id;
+    const promise = axios.get(url);
+    promise.then(beginEditing);
+}
+
+function beginEditing(object){
+    quizToEdit = object.data;
+    createQuizStart();
+    fillInfo();
+}
+
+function fillInfo(){
+    document.querySelector(".create-title").value = quizToEdit.title;
+    document.querySelector(".img-URL").value = quizToEdit.image;
+    document.querySelector(".questions-amount").value = quizToEdit.questions.length;
+    document.querySelector(".levels-amount").value = quizToEdit.levels.length;
+}
+
+function fillQuestions(){
+    const questionsTexts = document.querySelectorAll(".create-text");
+    const questionsColors = document.querySelectorAll(".create-color");
+    const questions = [];
+    for (let i = 0; i < questionsTexts.length; i++){
+        questionsTexts[i].value = quizToEdit.questions[i].title;
+        questionsColors[i].value = quizToEdit.questions[i].color;
+    }
+}
+
+function fillAnswers(){
+    const questionContainer = document.querySelectorAll(".create-question");
+    for (let i = 0; i < questionContainer.length; i++){
+        const allAnswers = questionContainer[i].querySelectorAll(".create-answer");
+        const allImgs = questionContainer[i].querySelectorAll(".create-answer-URL");
+        for (let n = 0; n < quizToEdit.questions[i].answers.length; n++){
+           allAnswers[n].value = quizToEdit.questions[i].answers[n].text;
+           allImgs[n].value = quizToEdit.questions[i].answers[n].image;
+        }
+    }
+}
+
+function fillLevels(){
+    const inputs = document.querySelectorAll(".create-level");
+    for(let i = 0;i<inputs.length;i++){
+        const fields = inputs[i].querySelectorAll(".container .create-level-input");
+        fields[0].value = quizToEdit.levels[i].title;
+        fields[1].value = quizToEdit.levels[i].minValue;
+        fields[2].value = quizToEdit.levels[i].image;
+        fields[3].value = quizToEdit.levels[i].text;
+    }
+}
+function sendQuiz(){
+    const headers = {"Secret-Key": `${personalQuizzesKey[position]}`};
+    const url = apiURL+quizToEdit.id;
+    axios.put(url, userQuizz, {headers});
+    editOrErase = false;
+    edit = false;
+}
 window.onload = getQuizzes;
