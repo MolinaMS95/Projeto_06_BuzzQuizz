@@ -607,7 +607,7 @@ function answersValidation(){
                 }
             }
         }
-        if (quizToEdit.questions[i].answers.length < 2 || (!containRightAnswer)){
+        if (userQuizz.questions[i].answers.length < 2 || (!containRightAnswer)){
             if(!containRightAnswer){
                 allAnswers[0].nextElementSibling.innerHTML="Você deve inserir a resposta certa e pelo menos uma errada!";
                 allAnswers[0].style = "background: #FFE9E9";
@@ -697,7 +697,7 @@ function fillQuestions(){
     const questionsTexts = document.querySelectorAll(".create-text");
     const questionsColors = document.querySelectorAll(".create-color");
     const questions = [];
-    for (let i = 0; i < questionsTexts.length; i++){
+    for (let i = 0; i < quizToEdit.questions.length; i++){
         questionsTexts[i].value = quizToEdit.questions[i].title;
         questionsColors[i].value = quizToEdit.questions[i].color;
     }
@@ -705,7 +705,7 @@ function fillQuestions(){
 
 function fillAnswers(){
     const questionContainer = document.querySelectorAll(".create-question");
-    for (let i = 0; i < questionContainer.length; i++){
+    for (let i = 0; i < quizToEdit.questions.length; i++){
         const allAnswers = questionContainer[i].querySelectorAll(".create-answer");
         const allImgs = questionContainer[i].querySelectorAll(".create-answer-URL");
         for (let n = 0; n < quizToEdit.questions[i].answers.length; n++){
@@ -717,7 +717,7 @@ function fillAnswers(){
 
 function fillLevels(){
     const inputs = document.querySelectorAll(".create-level");
-    for(let i = 0;i<inputs.length;i++){
+    for(let i = 0;i<quizToEdit.levels.length;i++){
         const fields = inputs[i].querySelectorAll(".container .create-level-input");
         fields[0].value = quizToEdit.levels[i].title;
         fields[1].value = quizToEdit.levels[i].minValue;
@@ -729,6 +729,8 @@ function sendQuiz(){
     const headers = {"Secret-Key": `${personalQuizzesKey[position]}`};
     const url = apiURL+quizToEdit.id;
     axios.put(url, userQuizz, {headers});
+    const created = document.querySelector(".quizz-created");
+    created.querySelector(".access-quiz").id = quizToEdit.id;
     editOrErase = false;
     edit = false;
 }
