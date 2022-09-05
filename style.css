@@ -80,9 +80,6 @@ main{
     color: #B9B9B9;
     line-height: 23px;
 
-    display: flex;
-    align-items: center;
-    text-align: center;
     text-align: center;
 
     margin-left: 30px;
@@ -270,6 +267,9 @@ main{
     font-size: 19px;
     color: #FFFFFF;
     text-align: center;
+
+    width: 100%;
+    word-wrap: break-word;
 }
 .level-img{
     margin: 10px 0px;
@@ -283,6 +283,9 @@ main{
     font-size: 17px;
 
     color: #484848;
+
+    width: 100%;
+    word-wrap: break-word;
 }
 .buttons{
     width: 100%;
