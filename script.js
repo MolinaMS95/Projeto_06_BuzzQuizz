@@ -492,6 +492,17 @@ function levelValidation(){
             fields[0].nextElementSibling.innerHTML = '';
             fields[0].style = "background: #FFFFFF";
         }
+        if(i>0){
+            if((fields[1].value<1)||(fields[1].value>100)){
+                failed = true;
+                fields[1].nextElementSibling.innerHTML = "O número deve estar entre 1 e 100";
+                fields[1].style = "background: #FFE9E9";
+            }
+            else{
+                fields[1].nextElementSibling.innerHTML = '';
+                fields[1].style = "background: #FFFFFF";
+            }
+        }
         if(!isValidUrl(fields[2].value)){
             failed = true;
             fields[2].nextElementSibling.innerHTML = 'A URL deve ter um formato válido';
