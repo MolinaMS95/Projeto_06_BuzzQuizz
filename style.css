@@ -323,6 +323,10 @@ button{
     align-items: center;
     justify-content: space-between;
 }
+.quizz-creation {
+    width: 100%;
+    max-width: 600px;
+}
 .quizz-creation input, textarea{
     width: 100%;
     max-width: 546px;
@@ -392,7 +396,7 @@ textarea{
     align-items: center;
 }
 .hidden{
-    display: none;
+    display: none !important;
 }
 
 @media (min-width: 340px){

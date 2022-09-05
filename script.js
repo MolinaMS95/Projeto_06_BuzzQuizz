@@ -386,9 +386,7 @@ function createQuestions(questions){
         }
     }
 }
-function collapseToggle(element){
-    element.parentElement.querySelector(".level-info").toggle("hidden");
-}
+
 function createLevels(){
     document.querySelector('.quizz-questions').classList.add('hidden');
     document.querySelector(".quizz-levels").classList.remove("hidden");
