@@ -533,8 +533,15 @@ function answersValidation(){
             }
         }
         if (userQuizz.questions[i].answers.length < 2 || (!containRightAnswer)){
-            alert("Você deve inserir a resposta certa e pelo menos uma errada!");
-            return;
+            if(!containRightAnswer){
+                allAnswers[0].nextElementSibling.innerHTML="Você deve inserir a resposta certa e pelo menos uma errada!";
+                allAnswers[0].style = "background: #FFE9E9";
+                return;
+            }
+            else {
+                allAnswers[1].nextElementSibling.innerHTML="Você deve inserir a resposta certa e pelo menos uma errada!";
+                allAnswers[1].style = "background: #FFE9E9";
+            }
         }
         containRightAnswer = false;
     }
