@@ -30,6 +30,7 @@ const isValidUrl = urlString=> {
 }
 
 function getQuizzes(){
+    document.querySelector('.loading-page').classList.remove('hidden');
     const request = axios.get(apiURL);
     request.then(getQuizzSuccess);
 }
@@ -60,6 +61,8 @@ function pushPersonalQuiz(data){
 }
 
 function listQuizzes(){
+    document.querySelector('.loading-page').classList.add('hidden');
+    document.querySelector('.home').classList.remove('hidden');
     createQuizDiv.classList.remove("hidden");
     quizDisplayList.innerHTML='';
     for(let i = 0; i<quizzes.length;i++){
@@ -95,6 +98,8 @@ function listQuizzes(){
 }
 
 function getSingleQuiz(element){
+    homeDiv.classList.add("hidden");
+    document.querySelector('.loading-page').classList.remove('hidden');
     const url = apiURL+element.id;
     const request = axios.get(url);
     request.then(singleQuizRequestSuccess);
@@ -108,14 +113,14 @@ function singleQuizRequestSuccess(data){
 
 function displayQuiz(quizData){
     currentQuiz = quizData;
-    homeDiv.classList.add("hidden");
-    quizDiv.classList.remove("hidden");
     questionHolder.innerHTML = '';
     quizHeader.style.backgroundImage = `url("${quizData.image}")`;
     quizHeader.querySelector(".quiz-title").innerHTML = quizData.title;
     for(let i = 0; i<quizData.questions.length;i++){
         displayQuestion(quizData.questions[i], questionHolder, i);
     }
+    document.querySelector('.loading-page').classList.add('hidden');
+    quizDiv.classList.remove("hidden");
     quizHeader.scrollIntoView();
 }
 
@@ -234,7 +239,6 @@ function restart(){
 function goHome(){
     buttonsBox.classList.add('hidden');
     resultBox.classList.add('hidden');
-    homeDiv.classList.remove("hidden");
     quizDiv.classList.add("hidden");
     questions = [];
     clicks = 0;
@@ -276,22 +280,26 @@ function infoValidation(){
     const title = document.querySelector(".create-title").value;
     const titleVerification = 19 < title.length && title.length < 66;
     if(!titleVerification){
-        alert("Título deve ter entre 20 e 65 caracteres");
+        document.querySelector(".create-title").nextElementSibling.innerHTML = "Título deve ter entre 20 e 65 caracteres";
+        document.querySelector(".create-title").style = "background: #FFE9E9";
     }
     const url = document.querySelector(".img-URL").value;
     const urlVerification = isValidUrl(url);
     if(!urlVerification){
-        alert("Sua URL de imagem deve ter um formato válido");
+        document.querySelector(".img-URL").nextElementSibling.innerHTML ="Sua URL de imagem deve ter um formato válido";
+        document.querySelector(".img-URL").style = "background: #FFE9E9";
     }
     const questions = document.querySelector(".questions-amount").value;
     const questionsVerification = 2 < questions;
     if(!questionsVerification){
-        alert("Deve ter pelo menos 3 perguntas");
+        document.querySelector(".questions-amount").nextElementSibling.innerHTML ="Deve ter pelo menos 3 perguntas";
+        document.querySelector(".questions-amount").style = "background: #FFE9E9";
     }
     levels = document.querySelector(".levels-amount").value;
     const levelsVerification = 1 < levels;
     if(!levelsVerification){
-        alert("Deve ter pelo menos 2 níveis");
+        document.querySelector(".levels-amount").nextElementSibling.innerHTML ="Deve ter pelo menos 2 níveis";
+        document.querySelector(".levels-amount").style = "background: #FFE9E9";
     }
     if(titleVerification && urlVerification && questionsVerification && levelsVerification){
         userQuizz.title = title;
@@ -317,29 +325,29 @@ function createQuestions(questions){
                 <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
                 <div class="container hidden">
                     <div class="question-info">
-                        <input class="create-text" placeholder="Texto da pergunta"/>
+                        <input class="create-text" placeholder="Texto da pergunta"/> <p class="error"></p>
                         <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
                     </div>
                     <p>Resposta correta</p>
                     <div class="correct-answer">
-                        <input class="create-answer" placeholder="Reposta correta"/>
-                        <input type="url" class="create-answer-URL" placeholder="URL da imagem"/>
+                        <input class="create-answer" placeholder="Reposta correta"/> <p class="error"></p>
+                        <input type="url" class="create-answer-URL" placeholder="URL da imagem"/> <p class="error"></p>
                     </div>
                     <div class="wrong-answers">
                         <p>Respostas incorretas</p>
                         <div class="option">
-                            <input class="create-answer" placeholder="Reposta incorreta 1"/>
-                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 1"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 1"/> <p class="error"></p>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 1"/> <p class="error"></p>
                         </div>
 
                         <div class="option">
-                            <input class="create-answer" placeholder="Reposta incorreta 2"/>
-                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 2"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 2"/> <p class="error"></p>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 2"/> <p class="error"></p>
                         </div>
 
                         <div class="option">
-                            <input class="create-answer" placeholder="Reposta incorreta 3"/>
-                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 3"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 3"/> <p class="error"></p>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 3"/> <p class="error"></p>
                         </div>
                     </div>
                 </div>
@@ -355,29 +363,29 @@ function createQuestions(questions){
                 <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
                 <div class="container hidden">
                     <div class="question-info">
-                        <input class="create-text" placeholder="Texto da pergunta"/>
+                        <input class="create-text" placeholder="Texto da pergunta"/> <p class="error"></p>
                         <input type="color" class="create-color" placeholder="Cor de fundo da pergunta"/>
                     </div>
                     <p>Resposta correta</p>
                     <div class="correct-answer">
-                        <input class="create-answer" placeholder="Reposta correta"/>
-                        <input type="url" class="create-answer-URL" placeholder="URL da imagem"/>
+                        <input class="create-answer" placeholder="Reposta correta"/> <p class="error"></p>
+                        <input type="url" class="create-answer-URL" placeholder="URL da imagem"/> <p class="error"></p>
                     </div>
                     <div class="wrong-answers">
                         <p>Respostas incorretas</p>
                         <div class="option">
-                            <input class="create-answer" placeholder="Reposta incorreta 1"/>
-                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 1"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 1"/> <p class="error"></p>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 1"/> <p class="error"></p>
                         </div>
     
                         <div class="option">
-                            <input class="create-answer" placeholder="Reposta incorreta 2"/>
-                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 2"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 2"/> <p class="error"></p>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 2"/> <p class="error"></p>
                         </div>
     
                         <div class="option">
-                            <input class="create-answer" placeholder="Reposta incorreta 3"/>
-                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 3"/>
+                            <input class="create-answer" placeholder="Reposta incorreta 3"/> <p class="error"></p>
+                            <input type="url" class="create-answer-URL" placeholder="URL da imagem 3"/> <p class="error"></p>
                         </div>
                     </div>
                 </div>
@@ -400,10 +408,10 @@ function createLevels(){
                 <p>Nível ${i+1} </p>
                 <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
                 <div class="container hidden">
-                    <input class="create-level-title" placeholder="Título do nível"/>
-                    <input value="0" type="number" class="create-treshold" disabled/>
-                    <input type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
-                    <textarea class="create-level-description" placeholder="Descrição do nível"></textarea>
+                    <input class="create-level-input" placeholder="Título do nível"/>
+                    <input class="create-level-input" value="0" type="number" class="create-treshold" disabled/>
+                    <input class="create-level-input" type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
+                    <textarea class="create-level-input" placeholder="Descrição do nível"></textarea>
                 </div>
             </div>
         `
@@ -413,10 +421,10 @@ function createLevels(){
                     <p>Nível ${i+1} </p>
                     <ion-icon onclick="expand(this)" name="create-outline"></ion-icon>
                     <div class="container hidden">
-                        <input class="create-level-title" placeholder="Título do nível"/>
-                        <input type="number" class="create-treshold" placeholder="% de acerto mínima"/>
-                        <input type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
-                        <textarea class="create-level-description" placeholder="Descrição do nível"></textarea>
+                        <input class="create-level-input" placeholder="Título do nível"/>
+                        <input class="create-level-input" type="number" class="create-treshold" placeholder="% de acerto mínima"/>
+                        <input class="create-level-input" type="url" class="create-level-URL" placeholder="URL da imagem do nível"/>
+                        <textarea class="create-level-input" placeholder="Descrição do nível"></textarea>
                     </div>
                 </div>
             `
@@ -431,15 +439,24 @@ function levelValidation(){
     const array = [];
     for(let i = 0;i<inputs.length;i++){
         const template = {};
-        const fields = inputs[i].querySelector(".container").children;
-        if(fields[0].value.length<8){
+        const fields = inputs[i].querySelectorAll(".container .create-level-input");
+        if(fields[0].value.length<10){
             failed = true;
+            const error1 = "<p class='error'>O Título deve ter no mínimo 10 caracteres</p>";
+            fields[0].insertAdjacentHTML("afterend", error1);
+            fields[0].style = "background: #FFE9E9";
         }
         if(!isValidUrl(fields[2].value)){
             failed = true;
+            const error3 = "<p class='error'>A URL deve ter um formato válido</p>";
+            fields[2].insertAdjacentHTML("afterend", error3);
+            fields[2].style = "background: #FFE9E9";
         }
-        if(fields[3].value.length<28){
-            failed = true;  
+        if(fields[3].value.length<30){
+            failed = true;
+            const error4 = "<p class='error'>A descrição deve ter pelo menos 30 caracteres</p>";
+            fields[3].insertAdjacentHTML("afterend", error4);
+            fields[3].style = "background: #FFE9E9";
         }
         if(!failed){
             template.title = fields[0].value;
@@ -450,7 +467,7 @@ function levelValidation(){
         }
     }
     if(failed){
-        alert("deu ruim aí maluco");
+        return;
     }else{
         userQuizz.levels = array;
         saveQuizz();
@@ -480,7 +497,8 @@ function questionValidation(){
             questions[i] = {title: textSizes, color: colors, answers: []};
         }
         else{
-            alert("A pergunta deve ter mais que 19 caracteres!");
+            questionsTexts[i].nextElementSibling.innerHTML = "A pergunta deve ter mais que 19 caracteres!";
+            questionsTexts[i].style = "background: #FFE9E9";
             return;
         }
     }
@@ -500,7 +518,8 @@ function answersValidation(){
             let answerImg = allImgs[n].value;
             let answerImgVerification = isValidUrl(answerImg);
             if(answerTextVerification && (!answerImgVerification)){
-                alert('Sua URL de imagem deve ter um formato válido');
+                allImgs[n].nextElementSibling.innerHTML = 'Sua URL de imagem deve ter um formato válido';
+                allImgs[n].style = "background: #FFE9E9";
                 return;
             }
             else if(answerTextVerification && answerImgVerification){
@@ -538,6 +557,5 @@ function quizzSavedSuccesfully(data){
     created.classList.remove("hidden");
     created.querySelector(".access-quiz").id = quizz.id;
 }
-
 
 window.onload = getQuizzes;

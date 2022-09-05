@@ -20,7 +20,7 @@
     </header>
 
     <main>
-        <div class="home"> 
+        <div class="home hidden">
           <div class="create-quiz">
             <p>Você não criou nenhum quiz ainda :(</p>
             <p class="create-quiz-button" onclick="createQuizStart()">Criar Quiz</p>
@@ -56,16 +56,20 @@
 
     </main>
 
-    <div class="quizz-creation hidden">
-      <div class="basic-info hidden">
+    <div class="quizz-creation">
+      <div class="basic-info">
         <div class="top-text">
           <p>Comece pelo começo</p>
         </div>
         <div class="input-area">
           <input class="create-title" placeholder="Título do seu quizz"/>
+          <p class="error"></p>
           <input type="url" class="img-URL" placeholder="URL da imagem do seu quizz"/>
+          <p class="error"></p>
           <input type="number" class="questions-amount" placeholder="Quantidade de perguntas do quizz"/>
+          <p class="error"></p>
           <input type="number" class="levels-amount" placeholder="Quantidade de níveis do quizz"/>
+          <p class="error"></p>
         </div>
         <div class="button-area">
           <button onclick="infoValidation()" class="next-step">Prosseguir pra criar perguntas</button>
@@ -91,6 +95,11 @@
           <p onclick="goHome2()">Voltar pra home</p>
         </div>
       </div>
+    </div>
+
+    <div class="loading-page hidden">
+      <img src="./img/loading.gif"/>
+      <p>Carregando</p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
