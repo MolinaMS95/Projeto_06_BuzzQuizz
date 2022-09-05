@@ -7,7 +7,9 @@ let clicks = 0;
 let levels = 0;
 let userQuizz = {title: undefined, image: undefined, questions: undefined, levels:undefined};
 let personalQuizzesID = [];
+let personalQuizzesKey = [];
 let personalQuizzesData = [];
+let position;
 
 const resultBox = document.querySelector('.results');
 const buttonsBox = document.querySelector('.buttons');
@@ -41,6 +43,10 @@ function getQuizzSuccess(data){
 function getPersonalQuizData(){
     personalQuizzesData.length = 0;
     const listaSerializada = localStorage.getItem("myQuizzes");
+    const secretKeys = localStorage.getItem("myKeys");
+    if(JSON.parse(secretKeys)!=null){
+        personalQuizzesKey = JSON.parse(secretKeys);
+    }
     if(JSON.parse(listaSerializada)!=null){
         personalQuizzesID = JSON.parse(listaSerializada);
     }
@@ -72,6 +78,7 @@ function listQuizzes(){
                 class="quiz-display" 
                 style="background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.904) 100%), url('${quizzes[i].image}')" 
                 id="${quizzes[i].id}"
+                data-identifier="quizz-card"
             >
                 <p class="quiz-display-title">${quizzes[i].title}</p>
             </li>
@@ -89,8 +96,13 @@ function listQuizzes(){
                     class="quiz-display" 
                     style="background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.904) 100%), url('${personalQuizzesData[i].image}')" 
                     id="${personalQuizzesData[i].id}"
+                    data-identifier="quizz-card"
                 >
                     <p class="quiz-display-title">${personalQuizzesData[i].title}</p>
+                    <div class="icons">
+                        <ion-icon name="create-outline"></ion-icon>
+                        <ion-icon onclick="deleteQuiz(this)" name="trash-outline"></ion-icon>
+                    </div>
                 </li>
             `
         }
@@ -249,7 +261,6 @@ function goHome(){
 function goHome2(){
     document.querySelector(".quizz-created").classList.add("hidden");
     quizzCreation.classList.add("hidden");
-    document.querySelector(".home").classList.remove("hidden");
     window.scrollTo(0,0);
     getQuizzes();
 }
@@ -555,13 +566,42 @@ function saveQuizz(){
 function quizzSavedSuccesfully(data){
     const quizz = data.data;
     const quizzID = quizz.id;
+    const quizzKey = quizz.key;
     personalQuizzesID.push(quizzID);
+    personalQuizzesKey.push(quizzKey);
     const serializedQuizzes = JSON.stringify(personalQuizzesID);
+    const serializedKeys = JSON.stringify(personalQuizzesKey);
     localStorage.setItem("myQuizzes", serializedQuizzes);
+    localStorage.setItem("myKeys", serializedKeys);
     document.querySelector(".quizz-levels").classList.add("hidden");
     const created = document.querySelector(".quizz-created");
     created.classList.remove("hidden");
     created.querySelector(".access-quiz").id = quizz.id;
+}
+
+function deleteQuiz(item){
+    const confirmation = confirm("Deseja deletar esse quiz?");
+    if(confirmation){
+        const url = apiURL+item.parentNode.parentNode.id;
+        position = personalQuizzesID.indexOf(Number(item.parentNode.parentNode.id));
+        const headers = {"Secret-Key": `${personalQuizzesKey[position]}`};
+        const promise = axios.delete(url, {headers});
+        promise.then(successDelete);
+    }
+    else{
+        return;
+    }
+}
+
+function successDelete(){
+    personalQuizzesData.splice(position);
+    personalQuizzesID.splice(position);
+    personalQuizzesKey.splice(position);
+    const serializedQuizzes = JSON.stringify(personalQuizzesID);
+    const serializedKeys = JSON.stringify(personalQuizzesKey);
+    localStorage.setItem("myQuizzes", serializedQuizzes);
+    localStorage.setItem("myKeys", serializedKeys);
+    location.reload();
 }
 
 window.onload = getQuizzes;

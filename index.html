@@ -20,22 +20,22 @@
     </header>
 
     <main>
-      <div class="home">
+      <div class="home hidden">
         <div>
           <div class="create-quiz">
             <p>Você não criou nenhum quiz ainda :(</p>
-            <p class="create-quiz-button" onclick="createQuizStart()">Criar Quiz</p>
+            <p class="create-quiz-button" onclick="createQuizStart()" data-identifier="create-quizz">Criar Quiz</p>
           </div>
           <div class="personal-quiz hidden">
             <p class="personal-quiz-title">Seus Quizzes</p>
-            <ion-icon class="create-quiz-icon" name="add-circle" onclick="createQuizStart()"></ion-icon>
-            <ul class="personal-quiz-list">
+            <ion-icon class="create-quiz-icon" name="add-circle" onclick="createQuizStart()" data-identifier="create-quizz"></ion-icon>
+            <ul class="personal-quiz-list" data-identifier="user-quizzes">
 
             </ul>
           </div>
           <div class="quiz-list-holder">
             <p class="quiz-list-title" >Todos os Quizzes</p>
-            <ul class="quiz-display-list">
+            <ul class="quiz-display-list" data-identifier="general-quizzes">
               <li class="quiz-display">
                 <p class="quiz-display-title"></p>
               </li>
@@ -101,6 +101,7 @@
       <img src="./img/loading.gif"/>
       <p>Carregando</p>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

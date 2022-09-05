@@ -121,6 +121,8 @@ main{
     flex-direction: column;
     justify-content: flex-end;
 
+    position: relative;
+
     width: 100%;
     max-width: 310px;
     aspect-ratio: 340/181;
@@ -416,6 +418,26 @@ textarea{
     font-size: 16px;
     color: #EC362D;
     font-weight: 400;
+}
+.icons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+
+    width: 43px;
+    height: 87px;
+
+    background-color: #EC362D;
+    border-radius: 10px 0px 0px 11px;
+
+    position: absolute;
+    top: 9px;
+    right: 0px;
+}
+.icons ion-icon{
+    font-size: 19px;
+    color: #FFFFFF;
 }
 .hidden{
     display: none !important;
